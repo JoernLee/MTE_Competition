@@ -2,6 +2,7 @@ package com.handsome.robot.Activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     public void onTabSelected(int position) {
         Log.d(TAG, "onTabSelected() called with: " + "position = [" + position + "]");
         FragmentManager fm = this.getFragmentManager();
+
         //开启事务
         FragmentTransaction transaction = fm.beginTransaction();
         switch (position) {
