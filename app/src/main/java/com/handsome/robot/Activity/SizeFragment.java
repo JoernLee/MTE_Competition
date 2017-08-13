@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -44,7 +45,12 @@ public class SizeFragment extends Fragment {
     private final int IMAGE_CODE = 1; // 这里的IMAGE_CODE是自己任意定义的
     private final int REQUEST_CODE = 2; // 这里的IMAGE_CODE是自己任意定义的
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE=0;
+
+
     private Button btnSelectImage;
+    private TextView tvL;
+    private TextView tvC;
+    private TextView tvR;
     private ImageView imagePhoto;
 
 
@@ -89,6 +95,11 @@ public class SizeFragment extends Fragment {
 
         btnSelectImage = (Button) view.findViewById(R.id.btn_select_image);
         imagePhoto = (ImageView) view.findViewById(R.id.image_photo);
+
+        tvL = (TextView)view.findViewById(R.id.tv_left_distance);
+        tvC = (TextView)view.findViewById(R.id.tv_center_distance);
+        tvR = (TextView)view.findViewById(R.id.tv_right_distance);
+
 
         btnSelectImage.setOnClickListener(new View.OnClickListener() {
             @Override

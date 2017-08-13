@@ -63,7 +63,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	int REQUEST_ENABLE_BT = 1;
 	// 蓝牙扫描时间
 	private static final long SCAN_PERIOD = 10000;
-
 	private static final int PERMISSION_REQUEST_COARSE_LOCATION=1;
 
 	@Override
@@ -82,6 +81,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		mleDeviceListAdapter = new LeDeviceListAdapter();
 		// 为listview指定适配器
 		lv.setAdapter(mleDeviceListAdapter);
+		// 设置蓝牙工具
 
 		/* listview点击函数 */
 		lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
