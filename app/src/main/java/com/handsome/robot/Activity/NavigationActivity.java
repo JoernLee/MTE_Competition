@@ -12,9 +12,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +29,8 @@ import com.handsome.robot.R;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
+import java.util.List;
+
 public class NavigationActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener {
     private BottomNavigationBar mBottomNavigationBar;
     private static final String TAG = "MainActivity";
@@ -34,13 +40,18 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     private BleFragment mbleFragment;//室内测量界面
 
     private BleUtils mBleUtils;
+    private LocationManager locationManager;
+    private String provider;
 
+
+    private Location mLocation;
 
 
     private BluetoothAdapter mBluetoothAdapter;
 
     int REQUEST_ENABLE_BT = 1;
-    private static final int PERMISSION_REQUEST_COARSE_LOCATION=1;
+    private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
+    private static final int PERMISSION_REQUEST_FINE_LOCATION = 2;
 
 
     @Override
@@ -48,7 +59,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         mBleUtils = new BleUtils();
-        mBottomNavigationBar = (BottomNavigationBar)findViewById(R.id.bottom_navigation_bar);
+        mBottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
         // TODO 设置模式
         mBottomNavigationBar.setMode(BottomNavigationBar.MODE_SHIFTING);
         //设置背景色样式
@@ -57,9 +68,9 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         mBottomNavigationBar.setInActiveColor(R.color.gray);
         mBottomNavigationBar.setBarBackgroundColor(R.color.royalblue);
 
-        mBottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.first_item,"尺寸测量"))
-                .addItem(new BottomNavigationItem(R.drawable.second_item,"室内测量"))
-                .addItem(new BottomNavigationItem(R.drawable.fourth_item,"蓝牙配置")).initialise();
+        mBottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.first_item, "尺寸测量"))
+                .addItem(new BottomNavigationItem(R.drawable.second_item, "室内测量"))
+                .addItem(new BottomNavigationItem(R.drawable.fourth_item, "蓝牙配置")).initialise();
         mBottomNavigationBar.setTabSelectedListener(this);
         setDefaultFragment();
 
@@ -67,6 +78,9 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         init_ble();
         //检查定位权限
         init_right();
+        //设置位置管理器
+        init_location();
+
     }
 
     public BleUtils getBleUtils() {
@@ -75,7 +89,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
 
     public void setBleUtils(BleUtils mBleUtils) {
         this.mBleUtils = mBleUtils;
-        if (mSizeFragment!=null){
+        if (mSizeFragment != null) {
             mSizeFragment.getTvL().setText(mBleUtils.getLeftDistance());
             mSizeFragment.getTvC().setText(mBleUtils.getCenterDistance());
             mSizeFragment.getTvR().setText(mBleUtils.getRightDistance());
@@ -87,9 +101,9 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         //采用add方式进行fragment切换
-        if (mSizeFragment == null){
+        if (mSizeFragment == null) {
             mSizeFragment = SizeFragment.newInstance("尺寸测量");
-            transaction.add(R.id.center_main_content,mSizeFragment);
+            transaction.add(R.id.center_main_content, mSizeFragment);
         }
         hideAllFragment(transaction);
         transaction.show(mSizeFragment);
@@ -99,14 +113,14 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     }
 
     //隐藏所有的fragment
-    private void hideAllFragment(FragmentTransaction transaction){
-        if(mSizeFragment != null){
+    private void hideAllFragment(FragmentTransaction transaction) {
+        if (mSizeFragment != null) {
             transaction.hide(mSizeFragment);
         }
-        if(mlocationFragment != null){
+        if (mlocationFragment != null) {
             transaction.hide(mlocationFragment);
         }
-        if(mbleFragment != null){
+        if (mbleFragment != null) {
             transaction.hide(mbleFragment);
         }
     }
@@ -115,12 +129,10 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         return mBluetoothAdapter;
     }
 
-    private void init_ble()
-    {
+    private void init_ble() {
         // 手机硬件支持蓝牙
         if (!getPackageManager().hasSystemFeature(
-                PackageManager.FEATURE_BLUETOOTH_LE))
-        {
+                PackageManager.FEATURE_BLUETOOTH_LE)) {
 
             Toast.makeText(this, "不支持BLE", Toast.LENGTH_SHORT).show();
         }
@@ -129,8 +141,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
         // 打开蓝牙权限
-        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled())
-        {
+        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(
                     BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
@@ -139,7 +150,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     }
 
     private void init_right() {
-        if(mBluetoothAdapter.isEnabled()){
+        if (mBluetoothAdapter.isEnabled()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -156,7 +167,30 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
                     });
                     builder.show();
                 }
+                if(this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_FINE_LOCATION);
+                }
             }
+        }
+    }
+
+    private void init_location(){
+        //获取定位服务
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //获取当前可用的位置控制器
+        List<String> list = locationManager.getProviders(true);
+        provider = LocationManager.NETWORK_PROVIDER;
+        if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            mLocation = locationManager.getLastKnownLocation(provider);
+            locationManager.requestLocationUpdates(provider, 1000, 2, locationListener);
         }
     }
 
@@ -182,9 +216,32 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
                     });
                     builder.show();
                 }
-                return;
+                break;
+            }
+            case PERMISSION_REQUEST_FINE_LOCATION:{
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    // Log.d(TAG, "coarse location permission granted");
+                    finish();
+                } else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Functionality limited");
+                    builder.setMessage("Since location access has not been granted this app will not be able to discover beacons when in the background.");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+
+                    });
+                    builder.show();
+                }
+                break;
             }
         }
+    }
+
+    public Location getLocation() {
+        return mLocation;
     }
 
     @Override
@@ -244,4 +301,39 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
 
     }
 
+    LocationListener locationListener = new LocationListener() {
+
+        @Override
+        public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onProviderEnabled(String arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onProviderDisabled(String arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onLocationChanged(Location arg0) {
+            // TODO Auto-generated method stub
+            // 更新当前经纬度
+            mLocation = arg0;
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (locationManager != null) {
+            locationManager.removeUpdates(locationListener);
+        }
+    }
 }
