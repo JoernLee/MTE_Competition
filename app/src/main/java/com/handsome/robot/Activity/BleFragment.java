@@ -95,7 +95,7 @@ public class BleFragment extends Fragment implements OnClickListener {
     private boolean scan_flag;
     private Handler mHandler = new Handler();
     private Handler myHandler = new Handler();
-    private BleUtils fBleUtils = new BleUtils();
+    private BleUtils fBleUtils;
     //蓝牙服务
     private static BluetoothLeService mBluetoothLeService;
 
@@ -103,6 +103,8 @@ public class BleFragment extends Fragment implements OnClickListener {
     public String deviceName;
     public String deviceAddress;
     public String deviceRssi;
+
+    public NavigationActivity mNavActivity;
 
 
     // 蓝牙扫描时间
@@ -170,6 +172,7 @@ public class BleFragment extends Fragment implements OnClickListener {
         lvDevice = (ListView) view.findViewById(R.id.lv_device);
         lvDevice.setAdapter(mleDeviceListAdapter);
 
+
         /* listview点击函数 */
         lvDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -179,9 +182,12 @@ public class BleFragment extends Fragment implements OnClickListener {
                 // TODO Auto-generated method stub
                 final BluetoothDevice device = mleDeviceListAdapter
                         .getDevice(position);
-                fBleUtils.setmDeviceName(device.getName());
-                fBleUtils.setmDeviceAddress(device.getAddress());
-                fBleUtils.setmRssi(rssis.get(position).toString());
+                fBleUtils.setDeviceName(device.getName());
+                fBleUtils.setDeviceAddress(device.getAddress());
+                fBleUtils.setRssi(rssis.get(position).toString());
+                fBleUtils.setBluetoothDevice(device);
+                fBleUtils.setBluetoothAdapter(mBluetoothAdapter);
+
 
                 deviceName = device.getName();
                 deviceAddress = device.getAddress();
@@ -209,7 +215,6 @@ public class BleFragment extends Fragment implements OnClickListener {
                     e.printStackTrace();
                     // TODO: handle exception
                 }
-
             }
         });
 
@@ -250,6 +255,19 @@ public class BleFragment extends Fragment implements OnClickListener {
         mBluetoothLeService = null;
     }
 
+    //TODO:离开Fragment时第一个调用这个方法，需要保存获得的参数
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        super.onDestroyView();
+    }
+
+    //下面是蓝牙广播接收器模块-用来接收来自别的蓝牙的消息
     /**
      * 广播接收器，负责接收BluetoothLeService类发送的数据
      */
@@ -286,7 +304,7 @@ public class BleFragment extends Fragment implements OnClickListener {
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action))//有效数据
             {
                 //处理发送过来的数据
-                displayData(intent.getExtras().getString(
+               displayData(intent.getExtras().getString(
                         BluetoothLeService.EXTRA_DATA));
                 System.out.println("BroadcastReceiver onData:"
                         + intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
@@ -334,7 +352,19 @@ public class BleFragment extends Fragment implements OnClickListener {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                String[] direction = rev_string.split("=");
+                if (direction[0].equals("left_distance")){
+                    direction[1] = direction[1] + "cm";
+                    fBleUtils.setLeftDistance(direction[1]);
+                }else if (direction[0].equals("center_distance")){
+                    direction[1] = direction[1] + "cm";
+                    fBleUtils.setCenterDistance(direction[1]);
+                }else if (direction[0].equals("right_distance")){
+                    direction[1] = direction[1] + "cm";
+                    fBleUtils.setRightDistance(direction[1]);
+                }
                 tvStatus.setText(rev_string);
+                mNavActivity.setBleUtils(fBleUtils);
                 btnDiscoonect.setEnabled(true);
             }
         });
@@ -434,20 +464,9 @@ public class BleFragment extends Fragment implements OnClickListener {
 
     }
 
-    // Gps是否可用
-    public static final boolean isGpsEnable(final Context context) {
-        LocationManager locationManager
-                = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (gps || network) {
-            return true;
-        }
-        return false;
-    }
 
     /*
-     * 按钮响应事件
+     * 按钮响应事件-扫描设备以及控制左中右红外测距器开关
      */
     @Override
     public void onClick(View v) {
@@ -563,6 +582,18 @@ public class BleFragment extends Fragment implements OnClickListener {
 
     }
 
+    // Gps是否可用
+    public static final boolean isGpsEnable(final Context context) {
+        LocationManager locationManager
+                = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (gps || network) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 蓝牙扫描回调函数 实现扫描蓝牙设备，回调蓝牙BluetoothDevice，可以获取name MAC等信息
      **/
@@ -593,7 +624,9 @@ public class BleFragment extends Fragment implements OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mBluetoothAdapter = ((NavigationActivity) activity).getmBluetoothAdapter();
+        mNavActivity = (NavigationActivity) activity;
+        mBluetoothAdapter = mNavActivity.getmBluetoothAdapter();
+        fBleUtils = mNavActivity.getBleUtils();
        /* ((NavigationActivity) activity).setHandler(myHandler);*/
     }
 

@@ -1,6 +1,7 @@
 package com.handsome.robot.Activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -52,6 +53,9 @@ public class SizeFragment extends Fragment {
     private TextView tvC;
     private TextView tvR;
     private ImageView imagePhoto;
+
+    private BleUtils sBleUtils;
+    private NavigationActivity sNavActivity;
 
 
     // TODO: Rename and change types of parameters
@@ -177,8 +181,10 @@ public class SizeFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        sNavActivity = (NavigationActivity) activity;
+        sBleUtils = sNavActivity.getBleUtils();
     }
 
     @Override
@@ -231,6 +237,18 @@ public class SizeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
 
+    }
+
+    public TextView getTvL() {
+        return tvL;
+    }
+
+    public TextView getTvC() {
+        return tvC;
+    }
+
+    public TextView getTvR() {
+        return tvR;
     }
 
 

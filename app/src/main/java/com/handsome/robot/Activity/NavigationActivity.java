@@ -2,6 +2,7 @@ package com.handsome.robot.Activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
@@ -32,6 +33,8 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     private LocationFragment mlocationFragment;//室内测量界面
     private BleFragment mbleFragment;//室内测量界面
 
+    private BleUtils mBleUtils;
+
 
 
     private BluetoothAdapter mBluetoothAdapter;
@@ -44,7 +47,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-
+        mBleUtils = new BleUtils();
         mBottomNavigationBar = (BottomNavigationBar)findViewById(R.id.bottom_navigation_bar);
         // TODO 设置模式
         mBottomNavigationBar.setMode(BottomNavigationBar.MODE_SHIFTING);
@@ -66,14 +69,46 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         init_right();
     }
 
+    public BleUtils getBleUtils() {
+        return mBleUtils;
+    }
 
+    public void setBleUtils(BleUtils mBleUtils) {
+        this.mBleUtils = mBleUtils;
+        if (mSizeFragment!=null){
+            mSizeFragment.getTvL().setText(mBleUtils.getLeftDistance());
+            mSizeFragment.getTvC().setText(mBleUtils.getCenterDistance());
+            mSizeFragment.getTvR().setText(mBleUtils.getRightDistance());
+        }
+    }
 
     private void setDefaultFragment() {
+
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        mSizeFragment = SizeFragment.newInstance("尺寸测量");
-        transaction.replace(R.id.center_main_content, mSizeFragment);
+        //采用add方式进行fragment切换
+        if (mSizeFragment == null){
+            mSizeFragment = SizeFragment.newInstance("尺寸测量");
+            transaction.add(R.id.center_main_content,mSizeFragment);
+        }
+        hideAllFragment(transaction);
+        transaction.show(mSizeFragment);
+
+        /*transaction.replace(R.id.center_main_content, mSizeFragment);*/
         transaction.commit();
+    }
+
+    //隐藏所有的fragment
+    private void hideAllFragment(FragmentTransaction transaction){
+        if(mSizeFragment != null){
+            transaction.hide(mSizeFragment);
+        }
+        if(mlocationFragment != null){
+            transaction.hide(mlocationFragment);
+        }
+        if(mbleFragment != null){
+            transaction.hide(mbleFragment);
+        }
     }
 
     public BluetoothAdapter getmBluetoothAdapter() {
@@ -163,26 +198,41 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
             case 0:
                 if (mSizeFragment == null) {
                     mSizeFragment = SizeFragment.newInstance("尺寸测量");
+                    transaction.add(R.id.center_main_content,mSizeFragment);
                 }
-                transaction.replace(R.id.center_main_content, mSizeFragment);
+                //隐藏所有fragment
+                hideAllFragment(transaction);
+                //显示需要显示的fragment
+                transaction.show(mSizeFragment);
+                /*transaction.replace(R.id.center_main_content, mSizeFragment);*/
                 break;
-
             case 1:
                 if (mlocationFragment == null) {
                     mlocationFragment = LocationFragment.newInstance("室内测量");
+                    transaction.add(R.id.center_main_content,mlocationFragment);
                 }
-                transaction.replace(R.id.center_main_content, mlocationFragment);
+                //隐藏所有fragment
+                hideAllFragment(transaction);
+                //显示需要显示的fragment
+                transaction.show(mlocationFragment);
+               /* transaction.replace(R.id.center_main_content, mlocationFragment);*/
                 break;
             case 2:
                 if (mbleFragment == null) {
                     mbleFragment = BleFragment.newInstance("蓝牙配置");
+                    transaction.add(R.id.center_main_content,mbleFragment);
                 }
-                transaction.replace(R.id.center_main_content, mbleFragment);
+                //隐藏所有fragment
+                hideAllFragment(transaction);
+                //显示需要显示的fragment
+                transaction.show(mbleFragment);
+               /* transaction.replace(R.id.center_main_content, mbleFragment);*/
                 break;
         }
         // 事务提交
         transaction.commit();
     }
+
 
     @Override
     public void onTabUnselected(int position) {
