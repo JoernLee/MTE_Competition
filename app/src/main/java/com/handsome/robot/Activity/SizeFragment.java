@@ -34,6 +34,7 @@ import com.handsome.robot.R;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -83,14 +84,19 @@ public class SizeFragment extends Fragment {
     private String imageLeftDistance;
     private String imageCenterDistance;
     private String imageRightDistance;
-    private String imageName;
-    private String imageTime;
-    private String imageGPS;
-
     //位置
     private Location location;
     private String latitude;
     private String longitude;
+
+    //姿态角度
+    private String directionAngle; //方向角，指向东南西北，绕Z轴角度
+    private String slantAngle; //倾斜角，手机头部和尾部抬起的角度，绕X轴角度
+    private String rotationAngle; //旋转角,手机左右侧抬起的角度，绕Y轴角度
+    DecimalFormat decimalFormat=new DecimalFormat(".00");
+    private TextView tvImagePosX;
+    private TextView tvImagePosY;
+    private TextView tvImagePosZ;
 
 
     // TODO: Rename and change types of parameters
@@ -131,19 +137,23 @@ public class SizeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_size, container, false);
         Bundle bundle = getArguments();
-
+        //拍照按钮
         btnSelectImage = (Button) view.findViewById(R.id.btn_select_image);
+        //照片显示
         imagePhoto = (ImageView) view.findViewById(R.id.image_photo);
-
+        //实时显示左中右距离
         tvL = (TextView) view.findViewById(R.id.tv_left_distance);
         tvC = (TextView) view.findViewById(R.id.tv_center_distance);
         tvR = (TextView) view.findViewById(R.id.tv_right_distance);
-
+        //照片的信息
         tvImageDistance = (TextView) view.findViewById(R.id.tv_image_distance);
         tvImageName = (TextView) view.findViewById(R.id.tv_image_name);
         tvImageTime = (TextView) view.findViewById(R.id.tv_image_time);
         tvImageLocation = (TextView) view.findViewById(R.id.tv_image_location);
 
+        tvImagePosX = (TextView)view.findViewById(R.id.tv_image_posture_x);
+        tvImagePosY = (TextView)view.findViewById(R.id.tv_image_posture_y);
+        tvImagePosZ = (TextView)view.findViewById(R.id.tv_image_posture_z);
 
         btnSelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,8 +181,8 @@ public class SizeFragment extends Fragment {
          * */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-            } else {
 
             }
             /*if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {*/
@@ -223,30 +233,6 @@ public class SizeFragment extends Fragment {
         }
         return Uri.fromFile(mediaFile);
     }
-
-    //拍照的代码
-    /*private void takePhoto() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            //创建一个File
-            photoFile = ImageUtil.createImageFile();
-            if (photoFile != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    //如果是7.0及以上的系统使用FileProvider的方式创建一个Uri
-                    Log.e(TAG, "Build.VERSION.SDK_INT >= Build.VERSION_CODES.N");
-                    photoURI = FileProvider.getUriForFile(this, "com.hm.camerademo.fileprovider", photoFile);
-                    takePictureIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    takePictureIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                } else {
-                    //7.0以下使用这种方式创建一个Uri
-                    photoURI = Uri.fromFile(photoFile);
-                }
-                //将Uri传递给系统相机
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, TAKE_PHOTO);
-            }
-        }
-    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -353,27 +339,42 @@ public class SizeFragment extends Fragment {
                     }
                 } else {
                     Log.i("URI", "Data is null");
-                    //获得拍照时候的左中右距离，文件名，拍照时间
+                    //获得拍照时候的左中右距离，文件名，拍照时间与经纬度坐标
                     File photoFile = getMediaFile();
                     String photoName = photoFile.getName();
                     String photoTime = photoName.split("_")[3].split("\\.")[0];
                     String photoLongitude = photoName.split("_")[1];
                     String photoLatitude = photoName.split("_")[2];
                     photoName = photoName.substring(0,3) +"_"+ photoTime.substring(9,17)+ ".jpg";
+                    /*姿态处理*/
+                    float[] angleValue = sNavActivity.getValues();
+                    //方向角-绕Z轴角度，南方为0/360，顺时针增加度数。
+                    directionAngle = decimalFormat.format(angleValue[0]+(float)180.00);
+                    //倾斜角-绕X轴角度，水平面朝上为180°，面朝下360/0°，手机顶部往上翘起减少，对着你往后转增加度数
+                    slantAngle = decimalFormat.format(angleValue[1]+(float)180.00);
+                    //旋转角-绕Y轴角度，水平面朝上为180°，面朝下360/0°，手机左侧抬起旋转增加，顺时针增加度数
+                    rotationAngle = decimalFormat.format(angleValue[2]+(float)180.00);
 
 
+                    //更新UI
                     imageLeftDistance = tvL.getText().toString();
                     imageCenterDistance = tvC.getText().toString();
                     imageRightDistance = tvR.getText().toString();
                     tvImageDistance.setText(imageLeftDistance + "-" + imageCenterDistance + "-" + imageRightDistance);
                     tvImageName.setText(photoName);
                     tvImageTime.setText(photoTime);
-                    tvImageLocation.setText(photoLongitude + "-" + photoLatitude);
+
 
 
                     //将照片显示
                     Bitmap bitmap = BitmapFactory.decodeFile(getMediaFile().getPath());
-                    imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bitmap, 300, 300));//imageView即为当前页面需要展示照片的控件，可替换
+                    imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bitmap, 250, 250));//imageView即为当前页面需要展示照片的控件，可替换
+
+                    //更新经纬度和姿态
+                    tvImageLocation.setText(photoLongitude + "-" + photoLatitude);
+                    tvImagePosX.setText("X:" + slantAngle + "°" + " ");
+                    tvImagePosY.setText("Y:" + rotationAngle + "°" + " ");
+                    tvImagePosZ.setText("Z:" + directionAngle + " °" + " ");
                 }
             }
         }

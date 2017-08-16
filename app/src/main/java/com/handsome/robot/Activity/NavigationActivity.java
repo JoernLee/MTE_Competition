@@ -12,6 +12,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,7 +35,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import java.util.List;
 
-public class NavigationActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener {
+public class NavigationActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener,SensorEventListener {
     private BottomNavigationBar mBottomNavigationBar;
     private static final String TAG = "MainActivity";
 
@@ -39,19 +43,31 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     private LocationFragment mlocationFragment;//室内测量界面
     private BleFragment mbleFragment;//室内测量界面
 
-    private BleUtils mBleUtils;
+    private BleUtils mBleUtils; //蓝牙工具
+    private BluetoothAdapter mBluetoothAdapter;//蓝牙适配器
+    /* 获取定位所用工具*/
     private LocationManager locationManager;
     private String provider;
-
-
     private Location mLocation;
-
-
-    private BluetoothAdapter mBluetoothAdapter;
 
     int REQUEST_ENABLE_BT = 1;
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 2;
+
+    /* 传感器工具 */
+    private SensorManager sensorManager = null;
+    private Sensor acc_sensor;
+    private Sensor mag_sensor;
+    //加速度传感器数据
+    float accValues[]=new float[3];
+    //地磁传感器数据
+    float magValues[]=new float[3];
+    //旋转矩阵，用来保存磁场和加速度的数据
+    float r[]=new float[9];
+
+    //模拟方向传感器的数据（原始数据为弧度）
+    float values[]=new float[3];
+
 
 
     @Override
@@ -80,20 +96,9 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         init_right();
         //设置位置管理器
         init_location();
+        //设置传感器管理器
+        init_sensor();
 
-    }
-
-    public BleUtils getBleUtils() {
-        return mBleUtils;
-    }
-
-    public void setBleUtils(BleUtils mBleUtils) {
-        this.mBleUtils = mBleUtils;
-        if (mSizeFragment != null) {
-            mSizeFragment.getTvL().setText(mBleUtils.getLeftDistance());
-            mSizeFragment.getTvC().setText(mBleUtils.getCenterDistance());
-            mSizeFragment.getTvR().setText(mBleUtils.getRightDistance());
-        }
     }
 
     private void setDefaultFragment() {
@@ -194,6 +199,40 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         }
     }
 
+    private void init_sensor(){
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        //加速度传感器和地磁传感器
+        acc_sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mag_sensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+        //给传感器注册监听：
+        sensorManager.registerListener(this, acc_sensor, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, mag_sensor,SensorManager.SENSOR_DELAY_GAME);
+
+    }
+
+    public Location getLocation() {
+        return mLocation;
+    }
+
+    public BleUtils getBleUtils() {
+        return mBleUtils;
+    }
+
+    public void setBleUtils(BleUtils mBleUtils) {
+        this.mBleUtils = mBleUtils;
+        if (mSizeFragment != null) {
+            mSizeFragment.getTvL().setText(mBleUtils.getLeftDistance());
+            mSizeFragment.getTvC().setText(mBleUtils.getCenterDistance());
+            mSizeFragment.getTvR().setText(mBleUtils.getRightDistance());
+        }
+    }
+
+    public float[] getValues() {
+        return values;
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -238,10 +277,6 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
                 break;
             }
         }
-    }
-
-    public Location getLocation() {
-        return mLocation;
     }
 
     @Override
@@ -335,5 +370,45 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         if (locationManager != null) {
             locationManager.removeUpdates(locationListener);
         }
+    }
+
+    //传感器状态改变时的回调方法
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+            accValues=event.values.clone();//这里是对象，需要克隆一份，否则共用一份数据
+        }
+        else if(event.sensor.getType()==Sensor.TYPE_MAGNETIC_FIELD){
+            magValues=event.values.clone();//这里是对象，需要克隆一份，否则共用一份数据
+        }
+        /**public static boolean getRotationMatrix (float[] R, float[] I, float[] gravity, float[] geomagnetic)
+         * 填充旋转数组r
+         * r：要填充的旋转数组
+         * I:将磁场数据转换进实际的重力坐标中 一般默认情况下可以设置为null
+         * gravity:加速度传感器数据
+         * geomagnetic：地磁传感器数据
+         */
+        SensorManager.getRotationMatrix(r, null, accValues, magValues);
+        /**
+         * public static float[] getOrientation (float[] R, float[] values)
+         * R：旋转数组
+         * values ：模拟方向传感器的数据
+         */
+
+        SensorManager.getOrientation(r, values);
+
+        //将弧度转化为角度后输出
+        /*
+        values[0]  ：方向角，但用（磁场+加速度）得到的数据范围是（-180～180）,也就是说，0表示正北，90表示正东，180/-180表示正南，-90表示正西。而直接通过方向感应器数据范围是（0～359）360/0表示正北，90表示正东，180表示正南，270表示正西。
+        values[1]  pitch 倾斜角  即由静止状态开始，前后翻转，手机顶部往上抬起（0~-180），手机尾部往上抬起（0~180）
+        values[2]  roll 旋转角 即由静止状态开始，左右翻转，手机左侧抬起（0~180）,手机右侧抬起（0~-180）
+        */
+        for(int i=0;i<3;i++){
+            values[i]=(float) Math.toDegrees(values[i]);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 }

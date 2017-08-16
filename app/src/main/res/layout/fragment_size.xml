@@ -92,16 +92,16 @@
     <ImageView
         android:id="@+id/image_photo"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="250dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.25">
+            android:layout_weight="0.2">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -118,7 +118,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.25">
+            android:layout_weight="0.2">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -135,7 +135,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.25">
+            android:layout_weight="0.2">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -152,7 +152,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.25">
+            android:layout_weight="0.2">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -163,6 +163,35 @@
                 android:layout_height="match_parent"
                 android:text="None"
                 android:id="@+id/tv_image_location"
+                android:textSize="16dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Posture ："
+                android:textSize="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="None"
+                android:id="@+id/tv_image_posture_x"
+                android:textSize="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=""
+                android:id="@+id/tv_image_posture_y"
+                android:textSize="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=""
+                android:id="@+id/tv_image_posture_z"
                 android:textSize="16dp"/>
         </LinearLayout>
 
