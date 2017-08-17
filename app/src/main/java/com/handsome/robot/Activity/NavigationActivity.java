@@ -1,16 +1,16 @@
 package com.handsome.robot.Activity;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -19,19 +19,16 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.opengl.GLSurfaceView;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
+import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.handsome.robot.R;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
-import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import java.util.List;
 
@@ -70,10 +67,14 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
 
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_navigation);
+
         mBleUtils = new BleUtils();
         mBottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
         // TODO 设置模式
@@ -100,6 +101,8 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         init_sensor();
 
     }
+
+
 
     private void setDefaultFragment() {
 

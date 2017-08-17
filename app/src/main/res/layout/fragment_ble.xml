@@ -13,7 +13,8 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="20dp"
-            android:text="扫描设备"
+            android:text="Scan Device"
+            android:textAllCaps="false"
             android:id="@+id/btn_scan_dev"
             android:onClick="onClick"/>
 
@@ -24,7 +25,8 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="20dp"
-            android:text="断开连接"
+            android:text="Disconnect"
+            android:textAllCaps="false"
             android:id="@+id/btn_disconnect"
             android:onClick="onClick"/>
 
@@ -52,21 +54,24 @@
             android:layout_height="match_parent"
             android:layout_weight="0.33"
             android:text="@string/left_close_status"
-            android:onClick="onClick"/>
+            android:onClick="onClick"
+            android:textAllCaps="false"/>
         <Button
             android:id="@+id/btn_center_operation"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
             android:text="@string/center_close_status"
-            android:onClick="onClick"/>
+            android:onClick="onClick"
+            android:textAllCaps="false"/>
         <Button
             android:id="@+id/btn_right_operation"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
             android:text="@string/right_close_status"
-            android:onClick="onClick"/>
+            android:onClick="onClick"
+            android:textAllCaps="false"/>
     </LinearLayout>
     <TextView
         android:id="@+id/tv_ble_status"

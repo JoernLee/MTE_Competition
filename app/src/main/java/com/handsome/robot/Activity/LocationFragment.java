@@ -1,9 +1,13 @@
 package com.handsome.robot.Activity;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.net.Uri;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.handsome.robot.R;
+
+import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +35,10 @@ public class LocationFragment extends Fragment {
     private TextView tvY;
     private TextView tvZ;
 
-    private View viewLocation;
+    private GLSurfaceView viewLocation;
+
+    //OpenGL窗口
+    private MyGLSurfaceView mGLView;
 
 
     // TODO: Rename and change types of parameters
@@ -73,12 +82,35 @@ public class LocationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_location, container, false);
         Bundle bundle = getArguments();
 
+        viewLocation= (GLSurfaceView) view.findViewById(R.id.view_location_image);
+
+        //如果本设备支持OpenGl ES 2.0
+        if (IsSupported()) {
+            // 创建渲染器实例
+            MyGLRenderer mRenderer = new MyGLRenderer();
+          /*  // 设置渲染器
+            mGLView.setRenderer(mRenderer);
+            //设置渲染模式
+            mGLView. setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);*/
+            //设置渲染器
+            viewLocation.setRenderer(mRenderer);
+            //设置渲染模式
+            viewLocation.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        }
+
         tvX= (TextView) view.findViewById(R.id.tv_x);
         tvY= (TextView) view.findViewById(R.id.tv_y);
         tvZ= (TextView) view.findViewById(R.id.tv_z);
-        viewLocation= (View) view.findViewById(R.id.view_location_image);
+
 
         return view;
+    }
+
+    private boolean IsSupported() {
+        ActivityManager activityManager =(ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
+        boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x2000;
+        return supportsEs2;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -96,6 +128,22 @@ public class LocationFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (viewLocation != null) {
+            viewLocation.onPause();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (viewLocation!= null) {
+            viewLocation.onResume();
+        }
     }
 
     /**

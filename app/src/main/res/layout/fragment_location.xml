@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp">
+            android:layout_height="match_parent">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="0.33"
@@ -74,10 +74,32 @@
 
     </LinearLayout>
 
-    <View
+    <android.opengl.GLSurfaceView
         android:id="@+id/view_location_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="30dp"/>
+        android:layout_height="350dp"
+        android:layout_marginBottom="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp">
+        <Button
+            android:id="@+id/btn_location_plane"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="Plane Orientation"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/btn_location_space"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="Space Orientation"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
 
 </LinearLayout>
