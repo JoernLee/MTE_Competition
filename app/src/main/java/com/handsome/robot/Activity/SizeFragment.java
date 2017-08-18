@@ -93,7 +93,7 @@ public class SizeFragment extends Fragment {
     private String directionAngle; //方向角，指向东南西北，绕Z轴角度
     private String slantAngle; //倾斜角，手机头部和尾部抬起的角度，绕X轴角度
     private String rotationAngle; //旋转角,手机左右侧抬起的角度，绕Y轴角度
-    DecimalFormat decimalFormat=new DecimalFormat(".00");
+    DecimalFormat decimalFormat=new DecimalFormat(".0");
     private TextView tvImagePosX;
     private TextView tvImagePosY;
     private TextView tvImagePosZ;

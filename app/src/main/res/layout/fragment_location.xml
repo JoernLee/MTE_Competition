@@ -8,12 +8,12 @@
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="63dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="30dp">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="0.33"
@@ -50,7 +50,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.33"
                 android:layout_height="match_parent"
-                android:text="50cm"
+                android:text="0cm"
                 android:textSize="16dp"
                 android:gravity="center"/>
             <TextView
@@ -58,7 +58,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.33"
                 android:layout_height="match_parent"
-                android:text="50cm"
+                android:text="0cm"
                 android:textSize="16dp"
                 android:gravity="center"/>
             <TextView
@@ -66,7 +66,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.33"
                 android:layout_height="match_parent"
-                android:text="50cm"
+                android:text="0cm"
                 android:textSize="16dp"
                 android:gravity="center"/>
         </LinearLayout>
@@ -90,7 +90,8 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:text="Plane Orientation"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:onClick="onClick"/>
 
         <Button
             android:id="@+id/btn_location_space"
@@ -98,7 +99,8 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:text="Space Orientation"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:onClick="onClick"/>
 
     </LinearLayout>
 

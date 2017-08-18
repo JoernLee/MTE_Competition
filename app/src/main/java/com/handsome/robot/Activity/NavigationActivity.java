@@ -30,6 +30,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.handsome.robot.R;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class NavigationActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener,SensorEventListener {
@@ -64,6 +65,8 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
 
     //模拟方向传感器的数据（原始数据为弧度）
     float values[]=new float[3];
+
+    DecimalFormat decimalFormat=new DecimalFormat(".00");
 
 
 
@@ -226,9 +229,19 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     public void setBleUtils(BleUtils mBleUtils) {
         this.mBleUtils = mBleUtils;
         if (mSizeFragment != null) {
-            mSizeFragment.getTvL().setText(mBleUtils.getLeftDistance());
-            mSizeFragment.getTvC().setText(mBleUtils.getCenterDistance());
-            mSizeFragment.getTvR().setText(mBleUtils.getRightDistance());
+            mSizeFragment.getTvL().setText(String.valueOf(decimalFormat.format(mBleUtils.getLeftDistance())) + "cm" );
+            mSizeFragment.getTvC().setText(String.valueOf(decimalFormat.format(mBleUtils.getCenterDistance())) + "cm");
+            mSizeFragment.getTvR().setText(String.valueOf(decimalFormat.format(mBleUtils.getRightDistance())) + "cm");
+        }
+        if (mlocationFragment != null){
+            mlocationFragment.getTvX().setText(String.valueOf(decimalFormat.format(mBleUtils.getLeftXLocation())) + "cm");
+            mlocationFragment.getTvY().setText(String.valueOf(decimalFormat.format(mBleUtils.getCenterYLocation())) + "cm");
+            mlocationFragment.getTvZ().setText("0cm");
+            float[] newLocation = new float[3];
+            newLocation[0] = mBleUtils.getLeftXLocation()/60.0f;
+            newLocation[1] = mBleUtils.getCenterYLocation()/60.0f;
+            newLocation[2] = 0.0f;
+            mlocationFragment.setNewArrayPoint(newLocation);
         }
     }
 
@@ -327,7 +340,6 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         // 事务提交
         transaction.commit();
     }
-
 
     @Override
     public void onTabUnselected(int position) {

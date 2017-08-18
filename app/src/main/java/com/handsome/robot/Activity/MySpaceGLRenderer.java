@@ -20,8 +20,7 @@ import static android.support.v7.appcompat.R.attr.height;
  * Created by Joern on 2017/08/16.
  */
 
-public class MyGLRenderer implements GLSurfaceView.Renderer {
-
+public class MySpaceGLRenderer implements GLSurfaceView.Renderer {
 
     //顶点数组
     //顶点数组
@@ -169,7 +168,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private float rotate;
 
-    public MyGLRenderer() {
+    public MySpaceGLRenderer() {
         //获取浮点形缓冲数据
         mBuffer = DrawUtils.getFloatBuffer(mArray);
         //获取浮点型颜色数据

@@ -14,9 +14,16 @@ public class BleUtils {
     private String mDeviceAddress;
     private String mRssi;
 
-    private String mLeftDistance;
-    private String mCenterDistance;
-    private String mRightDistance;
+    private Float mLeftDistance = 0f;
+    private Float mCenterDistance = 0f;
+    private Float mRightDistance = 0f;
+
+    private float leftFloatDistance;
+    private float centerFloatDistance;
+
+
+
+    private float rightFloatDistance;
 
     private BluetoothDevice mBluetoothDevice;
     private BluetoothAdapter mBluetoothAdapter;
@@ -46,27 +53,27 @@ public class BleUtils {
         this.mRssi = mRssi;
     }
 
-    public String getLeftDistance() {
+    public Float getLeftDistance() {
         return mLeftDistance;
     }
 
-    public void setLeftDistance(String mLeftDistance) {
+    public void setLeftDistance(Float mLeftDistance) {
         this.mLeftDistance = mLeftDistance;
     }
 
-    public String getCenterDistance() {
+    public Float getCenterDistance() {
         return mCenterDistance;
     }
 
-    public void setCenterDistance(String mCenterDistance) {
+    public void setCenterDistance(Float mCenterDistance) {
         this.mCenterDistance = mCenterDistance;
     }
 
-    public String getRightDistance() {
+    public Float getRightDistance() {
         return mRightDistance;
     }
 
-    public void setRightDistance(String mRightDistance) {
+    public void setRightDistance(Float mRightDistance) {
         this.mRightDistance = mRightDistance;
     }
 
@@ -92,5 +99,29 @@ public class BleUtils {
 
     public void setBluetoothLeService(BluetoothLeService mBluetoothLeService) {
         this.mBluetoothLeService = mBluetoothLeService;
+    }
+
+    public float getLeftXLocation() {
+        return leftFloatDistance;
+    }
+
+    public void setLeftXLocation(float leftFloatDistance) {
+        this.leftFloatDistance = leftFloatDistance;
+    }
+
+    public float getCenterYLocation() {
+        return centerFloatDistance;
+    }
+
+    public void setCenterYLocation(float centerFloatDistance) {
+        this.centerFloatDistance = centerFloatDistance;
+    }
+
+    public float getRightFloatDistance() {
+        return rightFloatDistance;
+    }
+
+    public void setRightFloatDistance(float rightFloatDistance) {
+        this.rightFloatDistance = rightFloatDistance;
     }
 }

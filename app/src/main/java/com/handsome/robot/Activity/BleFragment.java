@@ -354,14 +354,15 @@ public class BleFragment extends Fragment implements OnClickListener {
             public void run() {
                 String[] direction = rev_string.split("=");
                 if (direction[0].equals("left_distance")){
-                    direction[1] = direction[1] + "cm";
-                    fBleUtils.setLeftDistance(direction[1]);
+                    fBleUtils.setLeftXLocation(60.0f - Float.parseFloat(direction[1]));
+                    fBleUtils.setLeftDistance(Float.parseFloat(direction[1]));
+
                 }else if (direction[0].equals("center_distance")){
-                    direction[1] = direction[1] + "cm";
-                    fBleUtils.setCenterDistance(direction[1]);
+                    fBleUtils.setCenterYLocation(60.0f - Float.parseFloat(direction[1]));
+                    fBleUtils.setCenterDistance(Float.parseFloat(direction[1]));
                 }else if (direction[0].equals("right_distance")){
-                    direction[1] = direction[1] + "cm";
-                    fBleUtils.setRightDistance(direction[1]);
+                    fBleUtils.setRightFloatDistance(Float.parseFloat(direction[1]));
+                    fBleUtils.setRightDistance(Float.parseFloat(direction[1]));
                 }
                 tvStatus.setText(rev_string);
                 mNavActivity.setBleUtils(fBleUtils);
@@ -488,7 +489,7 @@ public class BleFragment extends Fragment implements OnClickListener {
 
                 } else {
                     scanLeDevice(false);
-                    btnScan.setText("扫描设备");
+                    btnScan.setText("Scan Device");
                 }
                 break;
             //TODO:选择关闭和开启的红外测距模块
@@ -565,7 +566,7 @@ public class BleFragment extends Fragment implements OnClickListener {
             Log.i("SCAN", "begin.....................");
             mScanning = true;
             scan_flag = false;
-            btnScan.setText("停止扫描");
+            btnScan.setText("Stop Scanning");
             mBluetoothAdapter.startLeScan(mLeScanCallback);
             //TODO:版本
 			/*if(android.os.Build.VERSION.SDK_INT<21)

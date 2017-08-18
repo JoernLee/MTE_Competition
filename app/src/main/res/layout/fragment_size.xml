@@ -64,7 +64,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:gravity="center"
-                android:text="50cm"
+                android:text="0cm"
                 android:textSize="16dp" />
 
             <TextView
@@ -73,7 +73,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:gravity="center"
-                android:text="50cm"
+                android:text="0cm"
                 android:textSize="16dp" />
 
             <TextView
@@ -82,7 +82,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.33"
                 android:gravity="center"
-                android:text="50cm"
+                android:text="0cm"
                 android:textSize="16dp" />
         </LinearLayout>
 

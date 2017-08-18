@@ -7,15 +7,16 @@ import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.handsome.robot.R;
+
+import java.nio.FloatBuffer;
+import java.text.DecimalFormat;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 
@@ -26,19 +27,31 @@ import static android.content.Context.ACTIVITY_SERVICE;
  * Use the {@link LocationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LocationFragment extends Fragment {
+public class LocationFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
+
+
 
     private TextView tvX;
     private TextView tvY;
     private TextView tvZ;
 
+    private Button btnPlane;
+    private Button btnSpace;
+
     private GLSurfaceView viewLocation;
+
+
+    float[] newArrayPoint = {0f,0f,0f};
 
     //OpenGL窗口
     private MyGLSurfaceView mGLView;
+    private MyPlaneGLRenderer mPlaneRenderer;
+    private MySpaceGLRenderer mSpaceRenderer;
+
+    DecimalFormat decimalFormat=new DecimalFormat(".00");
 
 
     // TODO: Rename and change types of parameters
@@ -50,6 +63,23 @@ public class LocationFragment extends Fragment {
     public LocationFragment() {
         // Required empty public constructor
     }
+
+    public TextView getTvX() {
+        return tvX;
+    }
+
+    public TextView getTvY() {
+        return tvY;
+    }
+
+    public TextView getTvZ() {
+        return tvZ;
+    }
+
+    public void setNewArrayPoint(float[] newArrayPoint) {
+        this.newArrayPoint = newArrayPoint;
+    }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -82,32 +112,41 @@ public class LocationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_location, container, false);
         Bundle bundle = getArguments();
 
-        viewLocation= (GLSurfaceView) view.findViewById(R.id.view_location_image);
-
-        //如果本设备支持OpenGl ES 2.0
-        if (IsSupported()) {
-            // 创建渲染器实例
-            MyGLRenderer mRenderer = new MyGLRenderer();
-          /*  // 设置渲染器
-            mGLView.setRenderer(mRenderer);
-            //设置渲染模式
-            mGLView. setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);*/
+        viewLocation = (GLSurfaceView) view.findViewById(R.id.view_location_image);
+        /*if (IsSupported()) {
+            mSpaceRenderer = new MySpaceGLRenderer();
             //设置渲染器
-            viewLocation.setRenderer(mRenderer);
+            viewLocation.setRenderer(mSpaceRenderer);
+            //设置渲染模式
+            viewLocation.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        }*/
+        if (IsSupported()) {
+            mPlaneRenderer = new MyPlaneGLRenderer();
+            //设置渲染器
+            viewLocation.setRenderer(mPlaneRenderer);
             //设置渲染模式
             viewLocation.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         }
 
-        tvX= (TextView) view.findViewById(R.id.tv_x);
-        tvY= (TextView) view.findViewById(R.id.tv_y);
-        tvZ= (TextView) view.findViewById(R.id.tv_z);
 
+       /* mSpaceRenderer = new MySpaceGLRenderer();*/
+
+
+        tvX = (TextView) view.findViewById(R.id.tv_x);
+        tvY = (TextView) view.findViewById(R.id.tv_y);
+        tvZ = (TextView) view.findViewById(R.id.tv_z);
+
+        btnPlane = (Button) view.findViewById(R.id.btn_location_plane);
+        btnPlane.setOnClickListener(this);
+        btnSpace = (Button) view.findViewById(R.id.btn_location_space);
+        btnSpace.setOnClickListener(this);
 
         return view;
+
     }
 
     private boolean IsSupported() {
-        ActivityManager activityManager =(ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
         ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
         boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x2000;
         return supportsEs2;
@@ -141,10 +180,25 @@ public class LocationFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (viewLocation!= null) {
+        if (viewLocation != null) {
             viewLocation.onResume();
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_location_plane:
+                mPlaneRenderer.setArrayPoint(newArrayPoint);
+                FloatBuffer newBuffer = DrawUtils.getFloatBuffer(newArrayPoint);
+                mPlaneRenderer.setBuffer(newBuffer);
+                break;
+            case R.id.btn_location_space:
+
+                break;
+        }
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this
