@@ -242,6 +242,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
             newLocation[1] = mBleUtils.getCenterYLocation()/60.0f;
             newLocation[2] = 0.0f;
             mlocationFragment.setNewArrayPoint(newLocation);
+            //
         }
     }
 
