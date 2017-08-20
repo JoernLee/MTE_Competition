@@ -88,11 +88,12 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         mBottomNavigationBar.setInActiveColor(R.color.gray);
         mBottomNavigationBar.setBarBackgroundColor(R.color.royalblue);
 
-        mBottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.first_item, "尺寸测量"))
-                .addItem(new BottomNavigationItem(R.drawable.second_item, "室内测量"))
-                .addItem(new BottomNavigationItem(R.drawable.fourth_item, "蓝牙配置")).initialise();
+        mBottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.firstitem, "Measurement"))
+                .addItem(new BottomNavigationItem(R.drawable.seconditem, "Location"))
+                .addItem(new BottomNavigationItem(R.drawable.thirditem, "Bluetooth")).initialise();
         mBottomNavigationBar.setTabSelectedListener(this);
         setDefaultFragment();
+
 
         //检查蓝牙
         init_ble();
@@ -226,6 +227,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         return mBleUtils;
     }
 
+    //这个方法是在BleFragment里面调用-用来修改两个Fragment的对于参数UI
     public void setBleUtils(BleUtils mBleUtils) {
         this.mBleUtils = mBleUtils;
         if (mSizeFragment != null) {
@@ -241,6 +243,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
             newLocation[0] = mBleUtils.getLeftXLocation()/60.0f;
             newLocation[1] = mBleUtils.getCenterYLocation()/60.0f;
             newLocation[2] = 0.0f;
+            //更新LocationFragment里面平面定位的坐标
             mlocationFragment.setNewArrayPoint(newLocation);
             //
         }

@@ -348,15 +348,24 @@ public class SizeFragment extends Fragment {
                     photoName = photoName.substring(0,3) +"_"+ photoTime.substring(9,17)+ ".jpg";
                     /*姿态处理*/
                     float[] angleValue = sNavActivity.getValues();
-                    //方向角-绕Z轴角度，南方为0/360，顺时针增加度数。
+
+                  /*  //方向角-绕Z轴角度，南方为0/360，顺时针增加度数。
                     directionAngle = decimalFormat.format(angleValue[0]+(float)180.00);
                     //倾斜角-绕X轴角度，水平面朝上为180°，面朝下360/0°，手机顶部往上翘起减少，对着你往后转增加度数
                     slantAngle = decimalFormat.format(angleValue[1]+(float)180.00);
                     //旋转角-绕Y轴角度，水平面朝上为180°，面朝下360/0°，手机左侧抬起旋转增加，顺时针增加度数
-                    rotationAngle = decimalFormat.format(angleValue[2]+(float)180.00);
+                    rotationAngle = decimalFormat.format(angleValue[2]+(float)180.00);*/
+
+                    //方向角-绕Z轴角度，南方为0/360，顺时针增加度数。
+                    directionAngle = decimalFormat.format(angleValue[0]+(float)180.00);
+                    //倾斜角-绕X轴角度，水平面朝上为0°，面朝下+-180°，手机顶部往上翘起减少，对着你往后转增加度数
+                    slantAngle = decimalFormat.format(angleValue[1]);
+                    //旋转角-绕Y轴角度，水平面朝上为0°，面朝下+-180°，手机左侧抬起旋转增加，顺时针增加度数
+                    rotationAngle = decimalFormat.format(angleValue[2]);
 
 
-                    //更新UI
+
+                    //更新UI-LCR Distance
                     imageLeftDistance = tvL.getText().toString();
                     imageCenterDistance = tvC.getText().toString();
                     imageRightDistance = tvR.getText().toString();
@@ -370,7 +379,7 @@ public class SizeFragment extends Fragment {
                     Bitmap bitmap = BitmapFactory.decodeFile(getMediaFile().getPath());
                     imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bitmap, 250, 250));//imageView即为当前页面需要展示照片的控件，可替换
 
-                    //更新经纬度和姿态
+                    //更新UI-经纬度和姿态
                     tvImageLocation.setText(photoLongitude + "-" + photoLatitude);
                     tvImagePosX.setText("X:" + slantAngle + "°" + " ");
                     tvImagePosY.setText("Y:" + rotationAngle + "°" + " ");
