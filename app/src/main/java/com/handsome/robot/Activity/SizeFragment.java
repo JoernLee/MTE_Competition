@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.ThumbnailUtils;
@@ -20,6 +22,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +35,7 @@ import android.widget.Toast;
 
 import com.handsome.robot.R;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -97,6 +101,9 @@ public class SizeFragment extends Fragment {
     private TextView tvImagePosX;
     private TextView tvImagePosY;
     private TextView tvImagePosZ;
+
+    //声明一个AlertDialog构造器
+    private AlertDialog.Builder builder;
 
 
     // TODO: Rename and change types of parameters
@@ -168,7 +175,49 @@ public class SizeFragment extends Fragment {
             }
         });
 
+        imagePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               showSimpleDialog(view);
+            }
+        });
+
         return view;
+    }
+
+    //显示基本Dialog
+    private void showSimpleDialog(View view) {
+        builder=new AlertDialog.Builder(getContext());
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setTitle("Measurement");
+        builder.setMessage("Are you sure to open the Measurement-Mode？");
+
+        //监听下方button点击事件
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(getContext(),"Open",Toast.LENGTH_SHORT).show();
+                imagePhoto.setDrawingCacheEnabled(true);//获取bm前执行，否则无法获取
+                Bitmap bitmap = setimage(imagePhoto); //调用setimage方法，得到返回值bitmap
+                byte[] bytes = Bitmap2Bytes(bitmap);
+                Intent intent = new Intent(getActivity(),MeasureActivity.class);
+                intent.putExtra("image",bytes);
+                startActivity(intent);
+                imagePhoto.setDrawingCacheEnabled(false);//获取bm后执行，以清空画图缓冲区，否则下一次从ImageView对象中获取的图像，
+                //还是原来的图像。
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(getContext(),"Cancel",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //设置对话框是可取消的
+        builder.setCancelable(true);
+        AlertDialog dialog=builder.create();
+        dialog.show();
     }
 
     private void takePhotos() {
@@ -212,6 +261,19 @@ public class SizeFragment extends Fragment {
 
             }
         }
+    }
+
+    //把图片转换成bitmap形式传递通过intent形式传递过去
+    private Bitmap setimage(ImageView view1){
+        Bitmap image = ((BitmapDrawable)view1.getDrawable()).getBitmap();
+        Bitmap bitmap1 = Bitmap.createBitmap(image);
+        return bitmap1;
+    }
+    //bitmap转换成byte形式
+    private byte[] Bitmap2Bytes(Bitmap bm){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
     }
 
     //获取图片保存的文件地址和名称

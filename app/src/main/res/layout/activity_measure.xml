@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp">
+
+    <ImageView
+        android:id="@+id/iv_measurement_photo"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:id="@+id/btn_add_point"
+            android:layout_marginTop="15dp"
+            android:text="add point"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:id="@+id/btn_clear_point"
+            android:layout_marginTop="15dp"
+            android:text="clear point"/>
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_test_XY" />
+
+</LinearLayout>
