@@ -2,28 +2,24 @@ package com.handsome.robot.Activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.ContentResolver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
-import android.location.LocationManager;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,28 +28,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.handsome.robot.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
- * Use the {@link SizeFragment#newInstance} factory method to
+ * Use the {@link NewLeanFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SizeFragment extends Fragment {
+public class NewLeanFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -69,11 +64,37 @@ public class SizeFragment extends Fragment {
     public final int TYPE_TAKE_PHOTO = 1;//Uri获取类型判断
 
 
+    private TextView tvSave;
+
+    private ImageView imagePhoto;
+
     private Button btnSelectImage;
+
+    //三轴距离
     private TextView tvL;
     private TextView tvC;
     private TextView tvR;
-    private ImageView imagePhoto;
+
+    //测试姿态
+    private TextView tvImagePosX;
+    private TextView tvImagePosY;
+    private TextView tvImagePosZ;
+
+    //当前角度
+    private TextView tvNowAngle;
+
+    //AM角度
+    private TextView tvAmAngle;
+    private Button  btnInAngle;
+
+    //时间
+    private TextView tvTime;
+    private Button btnInTime;
+
+    //地点
+    private TextView tvLocation;
+    private Button btnInLocation;
+
 
     private BleUtils sBleUtils;
     private NavigationActivity sNavActivity;
@@ -99,9 +120,7 @@ public class SizeFragment extends Fragment {
     private String slantAngle; //倾斜角，手机头部和尾部抬起的角度，绕X轴角度
     private String rotationAngle; //旋转角,手机左右侧抬起的角度，绕Y轴角度
     DecimalFormat decimalFormat=new DecimalFormat(".0");
-    private TextView tvImagePosX;
-    private TextView tvImagePosY;
-    private TextView tvImagePosZ;
+
 
     //声明一个AlertDialog构造器
     private AlertDialog.Builder builder;
@@ -112,7 +131,7 @@ public class SizeFragment extends Fragment {
 
     /*private OnFragmentInteractionListener mListener;*/
 
-    public SizeFragment() {
+    public NewLeanFragment() {
         // Required empty public constructor
 
     }
@@ -125,8 +144,8 @@ public class SizeFragment extends Fragment {
      * @return A new instance of fragment SizeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SizeFragment newInstance(String param1) {
-        SizeFragment fragment = new SizeFragment();
+    public static NewLeanFragment newInstance(String param1) {
+        NewLeanFragment fragment = new NewLeanFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
@@ -143,83 +162,53 @@ public class SizeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_size, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_lean, container, false);
         Bundle bundle = getArguments();
-        //拍照按钮
-        btnSelectImage = (Button) view.findViewById(R.id.btn_select_image);
+        //保存文字
+        tvSave = (TextView) view.findViewById(R.id.txt_save_image_lean);
+        tvSave.setOnClickListener(this);
         //照片显示
-        imagePhoto = (ImageView) view.findViewById(R.id.image_photo);
-        //实时显示左中右距离
-        tvL = (TextView) view.findViewById(R.id.tv_left_distance);
-        tvC = (TextView) view.findViewById(R.id.tv_center_distance);
-        tvR = (TextView) view.findViewById(R.id.tv_right_distance);
-        //照片的信息
-        tvImageDistance = (TextView) view.findViewById(R.id.tv_image_distance);
-        tvImageName = (TextView) view.findViewById(R.id.tv_image_name);
-        tvImageTime = (TextView) view.findViewById(R.id.tv_image_time);
-        tvImageLocation = (TextView) view.findViewById(R.id.tv_image_location);
+        imagePhoto = (ImageView) view.findViewById(R.id.iv_photo_lean);
+        //左中右距离
+        tvL = (TextView) view.findViewById(R.id.tv_left_distance_lean);
+        tvC = (TextView) view.findViewById(R.id.tv_center_distance_lean);
+        tvR = (TextView) view.findViewById(R.id.tv_right_distance_lean);
+        //测试姿态
+        tvImagePosX = (TextView)view.findViewById(R.id.tv_image_posture_x_lean);
+        tvImagePosY = (TextView)view.findViewById(R.id.tv_image_posture_y_lean);
+        tvImagePosZ = (TextView)view.findViewById(R.id.tv_image_posture_z_lean);
+        //目前距离
+        tvNowAngle = (TextView)view.findViewById(R.id.tv_now_angle_lean);
+        //AM距离
+        tvAmAngle = (TextView)view.findViewById(R.id.tv_am_angle_lean);
+        btnInAngle = (Button)view.findViewById(R.id.btn_in_angle_lean);
+        btnInAngle.setOnClickListener(this);
+        //时间
+        tvTime = (TextView)view.findViewById(R.id.tv_time_lean);
+        btnInTime = (Button)view.findViewById(R.id.btn_in_time_lean);
+        btnInTime.setOnClickListener(this);
+        //地点
+        tvLocation = (TextView)view.findViewById(R.id.tv_location_lean);
+        btnInLocation = (Button)view.findViewById(R.id.btn_location_lean);
+        btnInLocation.setOnClickListener(this);
 
-        tvImagePosX = (TextView)view.findViewById(R.id.tv_image_posture_x);
-        tvImagePosY = (TextView)view.findViewById(R.id.tv_image_posture_y);
-        tvImagePosZ = (TextView)view.findViewById(R.id.tv_image_posture_z);
-
-        btnSelectImage.setOnClickListener(new View.OnClickListener() {
+        imagePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //获取当前的经度纬度
-                location = sNavActivity.getLocation();
+                /*location = sNavActivity.getLocation();
                 latitude = Double.toString(location.getLatitude());
-                longitude = Double.toString(location.getLongitude());
+                longitude = Double.toString(location.getLongitude());*/
                 //判断有无读写SD卡权限
                 takePhotos();
 
             }
         });
 
-        imagePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               showSimpleDialog(view);
-            }
-        });
 
         return view;
     }
 
-    //显示基本Dialog
-    private void showSimpleDialog(View view) {
-        builder=new AlertDialog.Builder(getContext());
-        builder.setIcon(R.mipmap.ic_launcher);
-        builder.setTitle("Measurement");
-        builder.setMessage("Are you sure to open the Measurement-Mode？");
-
-        //监听下方button点击事件
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(getContext(),"Open",Toast.LENGTH_SHORT).show();
-                imagePhoto.setDrawingCacheEnabled(true);//获取bm前执行，否则无法获取
-                Bitmap bitmap = setimage(imagePhoto); //调用setimage方法，得到返回值bitmap
-                byte[] bytes = Bitmap2Bytes(bitmap);
-                Intent intent = new Intent(getActivity(),MeasureActivity.class);
-                intent.putExtra("image",bytes);
-                startActivity(intent);
-                imagePhoto.setDrawingCacheEnabled(false);//获取bm后执行，以清空画图缓冲区，否则下一次从ImageView对象中获取的图像，
-                //还是原来的图像。
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(getContext(),"Cancel",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //设置对话框是可取消的
-        builder.setCancelable(true);
-        AlertDialog dialog=builder.create();
-        dialog.show();
-    }
 
     private void takePhotos() {
         /**1.在AndroidManifest文件中添加需要的权限。
@@ -298,6 +287,103 @@ public class SizeFragment extends Fragment {
     }
 
     @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.txt_save_image_lean:
+                try {
+                    saveToSD(myShot(getActivity()), "/storage/emulated/0/Pictures/梅特勒/", "lean-" + getTimeNow() + ".png");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.btn_in_angle_lean:
+                tvAmAngle.setText(tvNowAngle.getText().toString());
+                break;
+            case R.id.btn_in_time_lean:
+                tvTime.setText(getTimeNow());
+                break;
+            case R.id.btn_location_lean:
+                Location location = sNavActivity.getLocation();
+                tvLocation.setText("" + Double.toString(location.getLongitude()) + "-" + Double.toString(location.getLatitude()));
+                break;
+        }
+    }
+
+    //保存到手机SD卡，供分享0519
+    private void saveToSD(Bitmap bmp, String dirName, String fileName) throws IOException {
+        // 判断sd卡是否存在
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            File dir = new File(dirName);
+            // 判断文件夹是否存在，不存在则创建
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+
+            File file = new File(dirName + fileName);
+            // 判断文件是否存在，不存在则创建
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(file);
+                if (fos != null) {
+                    // 第一参数是图片格式，第二个是图片质量，第三个是输出流
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    // 用完关闭
+                    fos.flush();
+                    fos.close();
+                }
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //当前屏幕截图0519
+    public Bitmap myShot(Activity activity) {
+        // 获取windows中最顶层的view
+        View view = activity.getWindow().getDecorView();
+        view.buildDrawingCache();
+
+        // 获取状态栏高度
+        Rect rect = new Rect();
+        view.getWindowVisibleDisplayFrame(rect);
+        int statusBarHeights = rect.top;
+        Display display = activity.getWindowManager().getDefaultDisplay();
+
+        // 获取屏幕宽和高
+        int widths = display.getWidth();
+        int heights = display.getHeight();
+
+        // 允许当前窗口保存缓存信息
+        view.setDrawingCacheEnabled(true);
+
+        // 去掉状态栏
+        Bitmap bmp = Bitmap.createBitmap(view.getDrawingCache(), 0,
+                statusBarHeights, widths, heights - statusBarHeights);
+
+        // 销毁缓存信息
+        view.destroyDrawingCache();
+
+        return bmp;
+    }
+
+    public String getTimeNow(){
+        SimpleDateFormat    formatter    =   new    SimpleDateFormat    ("yyyy年MM月dd日    HH:mm:ss     ");
+        Date    curDate    =   new    Date(System.currentTimeMillis());//获取当前时间
+        String    str    =    formatter.format(curDate);
+        return str;
+    }
+
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
         //针对SD写访问申请的回调
@@ -342,8 +428,8 @@ public class SizeFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        /*sDrawerActivity = (DrawerActivity) activity;*/
-       /* sBleUtils = sNavActivity.getBleUtils();*/
+        sNavActivity = (NavigationActivity) activity;
+        sBleUtils = sNavActivity.getBleUtils();
     }
 
     @Override
@@ -404,11 +490,11 @@ public class SizeFragment extends Fragment {
                     Log.i("URI", "Data is null");
                     //获得拍照时候的左中右距离，文件名，拍照时间与经纬度坐标
                     File photoFile = getMediaFile();
-                    String photoName = photoFile.getName();
+                    /*String photoName = photoFile.getName();
                     String photoTime = photoName.split("_")[3].split("\\.")[0];
                     String photoLongitude = photoName.split("_")[1];
-                    String photoLatitude = photoName.split("_")[2];
-                    photoName = photoName.substring(0,3) +"_"+ photoTime.substring(9,17)+ ".jpg";
+                    String photoLatitude = photoName.split("_")[2];*/
+                    /*photoName = photoName.substring(0,3) +"_"+ photoTime.substring(9,17)+ ".jpg";*/
                     /*姿态处理*/
                    /* float[] angleValue = sNavActivity.getValues();
 */
@@ -429,24 +515,24 @@ public class SizeFragment extends Fragment {
 
 
                     //更新UI-LCR Distance
-                    imageLeftDistance = tvL.getText().toString();
+                   /* imageLeftDistance = tvL.getText().toString();
                     imageCenterDistance = tvC.getText().toString();
                     imageRightDistance = tvR.getText().toString();
                     tvImageDistance.setText(imageLeftDistance + "-" + imageCenterDistance + "-" + imageRightDistance);
                     tvImageName.setText(photoName);
-                    tvImageTime.setText(photoTime);
+                    tvImageTime.setText(photoTime);*/
 
 
 
                     //将照片显示
                     Bitmap bitmap = BitmapFactory.decodeFile(getMediaFile().getPath());
-                    imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bitmap, 250, 250));//imageView即为当前页面需要展示照片的控件，可替换
+                    imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bitmap, 250, 200));//imageView即为当前页面需要展示照片的控件，可替换
 
                     //更新UI-经纬度和姿态
-                    tvImageLocation.setText(photoLongitude + "-" + photoLatitude);
+                   /* tvImageLocation.setText(photoLongitude + "-" + photoLatitude);
                     tvImagePosX.setText("X:" + slantAngle + "°" + " ");
                     tvImagePosY.setText("Y:" + rotationAngle + "°" + " ");
-                    tvImagePosZ.setText("Z:" + directionAngle + " °" + " ");
+                    tvImagePosZ.setText("Z:" + directionAngle + " °" + " ");*/
                 }
             }
         }

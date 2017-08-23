@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:icon="@drawable/ic_launcher"
+        android:showAsAction="always|withText"
+        android:title="@string/app_name">
+        <menu>
+            <!-- 定义一组单选菜单项 -->
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/font_10"
+                    android:title="111"/>
+                <item
+                    android:id="@+id/font_20"
+                    android:title="222"/>
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/font_normal"
+        android:title="@string/app_name">
+    </item>
+
+    <item
+        android:id="@+id/normal"
+        android:title="drawer2">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/red"
+                    android:title="@string/app_name"/>
+                <item
+                    android:id="@+id/blue"
+                    android:title="@string/app_name"/>
+            </group>
+        </menu>
+    </item>
+</menu>

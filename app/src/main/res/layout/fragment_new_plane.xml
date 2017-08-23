@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@color/royalblue"
+        android:id="@+id/first_line">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textColorHint="@color/white"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:id="@+id/top_name"
+            android:hint="平面标定"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/txt_save_image_plane"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:gravity="center|left"
+            android:text="保存"
+            android:onClick="onClick"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="标定模式"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="请打开LR"
+            android:textStyle="normal"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="match_parent"
+                android:text="三轴长度："
+                android:textSize="14dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="L "
+                android:textSize="14dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:text="None "
+                android:textSize="14dp"
+                android:id="@+id/tv_left_distance_plane_1"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="R "
+                android:textSize="14dp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:text="None "
+                android:textSize="14dp"
+                android:id="@+id/tv_right_distance_plane_1"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:text=""
+                android:gravity="center"
+                android:textSize="14dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textSize="14dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:text="测试姿态："
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:gravity="center"
+                android:text="X "
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/tv_image_posture_x_plane_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:text="None "
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:gravity="center"
+                android:text="Y "
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:text="None "
+                android:textSize="14dp"
+                android:id="@+id/tv_image_posture_y_plane_1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:gravity="center"
+                android:text="Z "
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:text="None "
+                android:textSize="14dp"
+                android:id="@+id/tv_image_posture_z_plane_1"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="标定值"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="0dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:text="长:"
+                android:textStyle="normal"
+                android:gravity="center_vertical"
+                android:textSize="14dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:text=""
+                android:gravity="center_vertical"
+                android:id="@+id/tv_length_plane_1"/>
+            <Button
+                android:id="@+id/btn_in_length_plane_1"
+                android:layout_gravity="center_vertical"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_weight="0.2"
+                android:background="@color/royalblue"
+                android:text="填入数据"
+                android:onClick="onClick"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="0dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:text="宽:"
+                android:textStyle="normal"
+                android:gravity="center_vertical"
+                android:textSize="14dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:text=""
+                android:gravity="center_vertical"
+                android:id="@+id/tv_width_plane_1"/>
+            <Button
+                android:id="@+id/btn_in_width_plane_1"
+                android:layout_gravity="center_vertical"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_weight="0.2"
+                android:background="@color/royalblue"
+                android:text="填入数据"
+                android:onClick="onClick"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="定位模式"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="请打开LC"
+            android:textStyle="normal"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="match_parent"
+                android:text="三轴长度："
+                android:textSize="14dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="L "
+                android:textSize="14dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:text="None "
+                android:textSize="14dp"
+                android:id="@+id/tv_left_distance_plane_2"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="C "
+                android:textSize="14dp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:text="None "
+                android:textSize="14dp"
+                android:id="@+id/tv_center_distance_plane_2"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:text=""
+                android:gravity="center"
+                android:textSize="14dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.13"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textSize="14dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:text="测试姿态："
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:gravity="center"
+                android:text="X "
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/tv_image_posture_x_plane_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:text="None "
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:gravity="center"
+                android:text="Y "
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:text="None "
+                android:textSize="14dp"
+                android:id="@+id/tv_image_posture_y_plane_2"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:gravity="center"
+                android:text="Z "
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.13"
+                android:text="None "
+                android:textSize="14dp"
+                android:id="@+id/tv_image_posture_z_plane_2"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="定位值"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="0dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:text="长:"
+                android:textStyle="normal"
+                android:gravity="center_vertical"
+                android:textSize="14dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:text=""
+                android:gravity="center_vertical"
+                android:id="@+id/tv_length_plane_2"/>
+            <Button
+                android:id="@+id/btn_in_length_plane_2"
+                android:layout_gravity="center_vertical"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_weight="0.2"
+                android:background="@color/royalblue"
+                android:text="填入数据"
+                android:onClick="onClick"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="0dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:text="宽:"
+                android:textStyle="normal"
+                android:gravity="center_vertical"
+                android:textSize="14dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:text=""
+                android:gravity="center_vertical"
+                android:id="@+id/tv_width_plane_2"/>
+            <Button
+                android:id="@+id/btn_in_width_plane_2"
+                android:layout_gravity="center_vertical"
+                android:layout_width="0dp"
+                android:layout_height="25dp"
+                android:layout_weight="0.2"
+                android:background="@color/royalblue"
+                android:text="填入数据"
+                android:onClick="onClick"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="可视化图像"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+    <ImageView
+        android:id="@+id/iv_image_plane"
+        android:layout_width="280dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="@color/royalblue"/>
+
+</LinearLayout>

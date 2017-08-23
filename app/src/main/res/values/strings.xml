@@ -11,4 +11,18 @@
     <string name="center_close_status">C_Close</string>
     <string name="right_close_status">R_Close</string>
 
+    <array name="planets_array">
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uraus</item>
+        <item>Neptune</item>
+    </array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
 </resources>

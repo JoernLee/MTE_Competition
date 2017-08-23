@@ -16,7 +16,10 @@
             android:text="Scan Device"
             android:textAllCaps="false"
             android:id="@+id/btn_scan_dev"
-            android:onClick="onClick"/>
+            android:onClick="onClick"
+            android:background="@color/royalblue"
+            android:textColor="@color/white"
+            />
 
         <Button
             android:layout_width="0dp"
@@ -28,7 +31,10 @@
             android:text="Disconnect"
             android:textAllCaps="false"
             android:id="@+id/btn_disconnect"
-            android:onClick="onClick"/>
+            android:onClick="onClick"
+            android:background="@color/royalblue"
+            android:textColor="@color/white"
+            />
 
     </LinearLayout>
 
@@ -53,17 +59,24 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
+            android:layout_marginRight="5dp"
             android:text="@string/left_close_status"
             android:onClick="onClick"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:background="@color/royalblue"
+            android:textColor="@color/white"
+            />
         <Button
             android:id="@+id/btn_center_operation"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
+            android:layout_marginRight="5dp"
             android:text="@string/center_close_status"
             android:onClick="onClick"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:background="@color/royalblue"
+            android:textColor="@color/white"/>
         <Button
             android:id="@+id/btn_right_operation"
             android:layout_width="wrap_content"
@@ -71,7 +84,9 @@
             android:layout_weight="0.33"
             android:text="@string/right_close_status"
             android:onClick="onClick"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:background="@color/royalblue"
+            android:textColor="@color/white"/>
     </LinearLayout>
     <TextView
         android:id="@+id/tv_ble_status"

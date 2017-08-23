@@ -37,9 +37,10 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     private BottomNavigationBar mBottomNavigationBar;
     private static final String TAG = "MainActivity";
 
-    private SizeFragment mSizeFragment;//尺寸测量界面
+    private NewMeasureFragment mSizeFragment;//尺寸测量界面
     private LocationFragment mlocationFragment;//室内测量界面
     private BleFragment mbleFragment;//室内测量界面
+
 
     private BleUtils mBleUtils; //蓝牙工具
     private BluetoothAdapter mBluetoothAdapter;//蓝牙适配器
@@ -114,7 +115,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         FragmentTransaction transaction = fm.beginTransaction();
         //采用add方式进行fragment切换
         if (mSizeFragment == null) {
-            mSizeFragment = SizeFragment.newInstance("尺寸测量");
+            mSizeFragment = NewMeasureFragment.newInstance("尺寸测量");
             transaction.add(R.id.center_main_content, mSizeFragment);
         }
         hideAllFragment(transaction);
@@ -231,9 +232,9 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
     public void setBleUtils(BleUtils mBleUtils) {
         this.mBleUtils = mBleUtils;
         if (mSizeFragment != null) {
-            mSizeFragment.getTvL().setText(String.valueOf(decimalFormat.format(mBleUtils.getLeftDistance())) + "cm" );
-            mSizeFragment.getTvC().setText(String.valueOf(decimalFormat.format(mBleUtils.getCenterDistance())) + "cm");
-            mSizeFragment.getTvR().setText(String.valueOf(decimalFormat.format(mBleUtils.getRightDistance())) + "cm");
+            //mSizeFragment.getTvL().setText(String.valueOf(decimalFormat.format(mBleUtils.getLeftDistance())) + "cm" );
+            //mSizeFragment.getTvC().setText(String.valueOf(decimalFormat.format(mBleUtils.getCenterDistance())) + "cm");
+            //mSizeFragment.getTvR().setText(String.valueOf(decimalFormat.format(mBleUtils.getRightDistance())) + "cm");
         }
         if (mlocationFragment != null){
             mlocationFragment.getTvX().setText(String.valueOf(decimalFormat.format(mBleUtils.getLeftXLocation())) + "cm");
@@ -309,7 +310,7 @@ public class NavigationActivity extends AppCompatActivity implements BottomNavig
         switch (position) {
             case 0:
                 if (mSizeFragment == null) {
-                    mSizeFragment = SizeFragment.newInstance("尺寸测量");
+                    mSizeFragment = NewMeasureFragment.newInstance("尺寸测量");
                     transaction.add(R.id.center_main_content,mSizeFragment);
                 }
                 //隐藏所有fragment
