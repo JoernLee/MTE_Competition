@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
@@ -66,7 +67,7 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
 
     private TextView tvSave;
 
-    private ImageView imagePhoto;
+    public PlaneView viewPlane;
 
     //三轴距离
     private TextView tvL_1;
@@ -87,11 +88,20 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
     private TextView tvPlaneLength_2;
     private Button btnPlaneLength_1;
     private Button btnPlaneLength_2;
+    private float roomLength;
 
     private TextView tvPlaneWidth_1;
     private TextView tvPlaneWidth_2;
     private Button btnPlaneWidth_1;
     private Button btnPlaneWidth_2;
+    private float roomWidth;
+
+    private Canvas canvas = new Canvas();
+
+    //定位值
+    private float roomX = 0;
+    private float roomY = 0;
+
 
 
     private BleUtils sBleUtils;
@@ -166,7 +176,8 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
         tvSave = (TextView) view.findViewById(R.id.txt_save_image_plane);
         tvSave.setOnClickListener(this);
         //照片显示
-        imagePhoto = (ImageView) view.findViewById(R.id.iv_image_plane);
+        viewPlane = (PlaneView) view.findViewById(R.id.iv_image_plane);
+        viewPlane.setOnClickListener(this);
         //左中右距离
         tvL_1 = (TextView) view.findViewById(R.id.tv_left_distance_plane_1);
         tvL_2 = (TextView) view.findViewById(R.id.tv_left_distance_plane_2);
@@ -232,18 +243,35 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                 }
                 break;
+            //标定的长
             case R.id.btn_in_length_plane_1:
-
+                Float leftDistance1 = Float.valueOf(tvL_1.getText().toString().substring(0,tvL_1.getText().toString().length()-2)) ;
+                Float rightDistance1 = Float.valueOf(tvR_1.getText().toString().substring(0,tvR_1.getText().toString().length()-2)) ;
+                roomLength = leftDistance1 + 7.5f + rightDistance1;
+                tvPlaneLength_1.setText(String.valueOf(decimalFormat.format(leftDistance1 + 7.5f + rightDistance1)) + "cm");
                 break;
             case R.id.btn_in_width_plane_1:
-
+                Float leftDistance2 = Float.valueOf(tvL_1.getText().toString().substring(0,tvL_1.getText().toString().length()-2)) ;
+                Float rightDistance2 = Float.valueOf(tvR_1.getText().toString().substring(0,tvR_1.getText().toString().length()-2)) ;
+                roomWidth = leftDistance2 + 7.5f + rightDistance2;
+                tvPlaneWidth_1.setText(String.valueOf(decimalFormat.format(leftDistance2 + 7.5f + rightDistance2)) + "cm");
                 break;
             case R.id.btn_in_length_plane_2:
-
+                Float leftDistance3 = Float.valueOf(tvL_1.getText().toString().substring(0,tvL_1.getText().toString().length()-2)) ;
+                roomX = leftDistance3 - (roomLength/2);
+                tvPlaneLength_2.setText(String.valueOf(decimalFormat.format(roomX)));
                 break;
             case R.id.btn_in_width_plane_2:
-
+                Float centerDistance = Float.valueOf(tvC_2.getText().toString().substring(0,tvC_2.getText().toString().length()-2)) ;
+                roomY = (roomWidth/2) - centerDistance;
+                tvPlaneWidth_2.setText(String.valueOf(decimalFormat.format(roomY)));
                 break;
+            case R.id.iv_image_plane:
+                viewPlane.setRecLength(roomLength);
+                viewPlane.setRecWidth(roomWidth);
+                viewPlane.setPointX(roomX);
+                viewPlane.setPointY(roomY);
+                viewPlane.invalidate();
         }
     }
 
@@ -398,7 +426,6 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
                 Uri originalUri = data.getData(); // 获得图片的uri
                 Bitmap bit = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(originalUri));
                 //图片进行缩略显示-防止图片缓存溢出
-                imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bit, 300, 300));
 
                 //下面的似乎不行-指针总是返回空
                 /*String[] proj = {MediaStore.Images.Media.DATA};
@@ -425,7 +452,6 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
                     if (data.hasExtra("data")) {
                         Log.i("URI", "data is not null");
                         Bitmap bitmap = data.getParcelableExtra("data");
-                        imagePhoto.setImageBitmap(bitmap);//imageView即为当前页面需要展示照片的控件，可替换
                     }
                 } else {
                     Log.i("URI", "Data is null");
@@ -467,7 +493,6 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
 
                     //将照片显示
                     Bitmap bitmap = BitmapFactory.decodeFile(getMediaFile().getPath());
-                    imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bitmap, 250, 200));//imageView即为当前页面需要展示照片的控件，可替换
 
                     //更新UI-经纬度和姿态
                    /* tvImageLocation.setText(photoLongitude + "-" + photoLatitude);

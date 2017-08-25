@@ -73,5 +73,4 @@ public class MyListAdapter extends BaseAdapter {
         zujian.title.setText((String)data.get(position).get("title"));
         return convertView;
     }
-
 }

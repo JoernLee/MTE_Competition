@@ -529,9 +529,9 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
     public List<Map<String, Object>> getData(){
         List<Map<String, Object>> list=new ArrayList<>();
         String[] strTitle=mMenuTitles;
-        Object[] image={R.drawable.ic_drawer,R.drawable.ic_drawer,
-                R.drawable.ic_drawer ,R.drawable.ic_drawer,R.drawable.ic_drawer,
-                R.drawable.ic_drawer,R.drawable.ic_drawer};
+        Object[] image={R.drawable.list_0,R.drawable.list_1,
+                R.drawable.list_2 ,R.drawable.list_3,R.drawable.list_4,
+                R.drawable.list_5,R.drawable.list_6};
         for(int i =0;i<7;i++) {
             Map<String, Object> map = new HashMap<>();
             map.put("image",image[i] );

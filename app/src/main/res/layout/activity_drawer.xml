@@ -11,10 +11,12 @@
         android:layout_weight="0.91">
     </FrameLayout>
 
+
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="260dp"
         android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
         android:layout_gravity="start"
         android:background="@color/white"
         android:choiceMode="singleChoice"

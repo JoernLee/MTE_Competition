@@ -177,7 +177,7 @@
         android:orientation="vertical"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -284,7 +284,7 @@
         android:orientation="vertical"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -418,7 +418,7 @@
         android:orientation="vertical"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -435,7 +435,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.2"
                 android:layout_height="match_parent"
-                android:text="长:"
+                android:text="X:"
                 android:textStyle="normal"
                 android:gravity="center_vertical"
                 android:textSize="14dp"/>
@@ -465,7 +465,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.2"
                 android:layout_height="match_parent"
-                android:text="宽:"
+                android:text="Y:"
                 android:textStyle="normal"
                 android:gravity="center_vertical"
                 android:textSize="14dp"/>
@@ -495,7 +495,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.2"
                 android:layout_height="match_parent"
-                android:text="高:"
+                android:text="Z:"
                 android:textStyle="normal"
                 android:gravity="center_vertical"
                 android:textSize="14dp"/>
@@ -519,18 +519,5 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="可视化图像"
-        android:textSize="16dp"
-        android:textStyle="bold" />
-    <ImageView
-        android:id="@+id/iv_image_space"
-        android:layout_width="280dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:background="@color/royalblue"/>
 
 </LinearLayout>

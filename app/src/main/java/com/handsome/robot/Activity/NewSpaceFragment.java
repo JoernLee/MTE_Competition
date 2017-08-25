@@ -95,6 +95,15 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
     private Button btnspaceHeight_1;
     private Button btnspaceHeight_2;
 
+    private float spaceLength;
+    private float spaceWidth;
+    private float spaceHeight;
+
+    //定位值
+    private float spaceX = 0;
+    private float spaceY = 0;
+    private float spaceZ = 0;
+
 
     private BleUtils sBleUtils;
     private NavigationActivity sNavActivity;
@@ -169,8 +178,6 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
         //保存文字
         tvSave = (TextView) view.findViewById(R.id.txt_save_image_space);
         tvSave.setOnClickListener(this);
-        //照片显示
-        imagePhoto = (ImageView) view.findViewById(R.id.iv_image_space);
         //左中右距离
         tvL_1 = (TextView) view.findViewById(R.id.tv_left_distance_space_1);
         tvL_2 = (TextView) view.findViewById(R.id.tv_left_distance_space_2);
@@ -244,22 +251,37 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.btn_in_length_space_1:
-
+                Float leftDistance1 = Float.valueOf(tvL_1.getText().toString().substring(0,tvL_1.getText().toString().length()-2)) ;
+                Float rightDistance1 = Float.valueOf(tvR_1.getText().toString().substring(0,tvR_1.getText().toString().length()-2)) ;
+                spaceLength = leftDistance1 + 7.5f + rightDistance1;
+                tvspaceLength_1.setText(String.valueOf(decimalFormat.format(leftDistance1 + 7.5f + rightDistance1)) + "cm");
                 break;
             case R.id.btn_in_width_space_1:
-
+                Float leftDistance2 = Float.valueOf(tvL_1.getText().toString().substring(0,tvL_1.getText().toString().length()-2)) ;
+                Float rightDistance2 = Float.valueOf(tvR_1.getText().toString().substring(0,tvR_1.getText().toString().length()-2)) ;
+                spaceWidth = leftDistance2 + 7.5f + rightDistance2;
+                tvspaceWidth_1.setText(String.valueOf(decimalFormat.format(leftDistance2 + 7.5f + rightDistance2)) + "cm");
                 break;
             case R.id.btn_in_height_space_1:
-
+                Float leftDistance3 = Float.valueOf(tvL_1.getText().toString().substring(0,tvL_1.getText().toString().length()-2)) ;
+                Float rightDistance3 = Float.valueOf(tvR_1.getText().toString().substring(0,tvR_1.getText().toString().length()-2)) ;
+                spaceHeight = leftDistance3 + 7.5f + rightDistance3;
+                tvspaceHeight_1.setText(String.valueOf(decimalFormat.format(leftDistance3 + 7.5f + rightDistance3)) + "cm");
                 break;
             case R.id.btn_in_length_space_2:
-
+                Float leftDistance4 = Float.valueOf(tvL_1.getText().toString().substring(0,tvL_1.getText().toString().length()-2)) ;
+                spaceX = leftDistance4 - (spaceLength/2);
+                tvspaceLength_2.setText(String.valueOf(decimalFormat.format(spaceX)));
                 break;
             case R.id.btn_in_width_space_2:
-
+                Float leftDistance5 = Float.valueOf(tvC_2.getText().toString().substring(0,tvC_2.getText().toString().length()-2)) ;
+                spaceY = leftDistance5 - (spaceWidth/2);
+                tvspaceWidth_2.setText(String.valueOf(decimalFormat.format(spaceY)));
                 break;
             case R.id.btn_in_height_space_2:
-
+                Float leftDistance6 = Float.valueOf(tvC_2.getText().toString().substring(0,tvC_2.getText().toString().length()-2)) ;
+                spaceZ = leftDistance6 - (spaceHeight/2);
+                tvspaceHeight_2.setText(String.valueOf(decimalFormat.format(spaceZ)));
                 break;
         }
     }
