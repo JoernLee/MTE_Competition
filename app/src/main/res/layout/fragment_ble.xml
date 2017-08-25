@@ -93,6 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:gravity="center"
-        android:text="Disconnecte"/>
+        android:text="Disconnecte"
+        android:visibility="invisible"/>
 
 </LinearLayout>

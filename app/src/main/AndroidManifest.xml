@@ -32,7 +32,7 @@
             android:name=".Activity.service.BluetoothLeService"
             android:enabled="true"></service>
 
-        <activity android:name=".Activity.NavigationActivity">
+        <activity android:name=".Activity.DrawerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.MeasureActivity"/>
-        <activity android:name=".Activity.DrawerActivity"/>
+        <activity android:name=".Activity.NavigationActivity"/>
     </application>
 
 </manifest>

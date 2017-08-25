@@ -158,6 +158,8 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
 
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -381,8 +383,8 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        sNavActivity = (NavigationActivity) activity;
-        sBleUtils = sNavActivity.getBleUtils();
+        sDrawerActivity = (DrawerActivity) activity;
+        sBleUtils = sDrawerActivity.getBleUtils();
     }
 
     @Override
@@ -505,6 +507,46 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public TextView getTvL_1() {
+        return tvL_1;
+    }
+
+    public TextView getTvL_2() {
+        return tvL_2;
+    }
+
+    public TextView getTvC_2() {
+        return tvC_2;
+    }
+
+    public TextView getTvR_1() {
+        return tvR_1;
+    }
+
+    public TextView getTvImagePosX_1() {
+        return tvImagePosX_1;
+    }
+
+    public TextView getTvImagePosY_1() {
+        return tvImagePosY_1;
+    }
+
+    public TextView getTvImagePosZ_1() {
+        return tvImagePosZ_1;
+    }
+
+    public TextView getTvImagePosX_2() {
+        return tvImagePosX_2;
+    }
+
+    public TextView getTvImagePosY_2() {
+        return tvImagePosY_2;
+    }
+
+    public TextView getTvImagePosZ_2() {
+        return tvImagePosZ_2;
     }
 
 

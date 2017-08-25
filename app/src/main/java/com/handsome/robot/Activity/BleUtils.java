@@ -20,10 +20,12 @@ public class BleUtils {
 
     private float leftFloatDistance;
     private float centerFloatDistance;
-
-
-
     private float rightFloatDistance;
+
+
+
+    //判断当前运行的6个碎片
+    private int nowFragmentNumber = 0;
 
     private BluetoothDevice mBluetoothDevice;
     private BluetoothAdapter mBluetoothAdapter;
@@ -123,5 +125,13 @@ public class BleUtils {
 
     public void setRightFloatDistance(float rightFloatDistance) {
         this.rightFloatDistance = rightFloatDistance;
+    }
+
+    public int getNowFragmentNumber() {
+        return nowFragmentNumber;
+    }
+
+    public void setNowFragmentNumber(int nowFragmentNumber) {
+        this.nowFragmentNumber = nowFragmentNumber;
     }
 }

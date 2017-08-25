@@ -219,6 +219,8 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
     }
 
 
+
+
     private void takePhotos() {
         /**1.在AndroidManifest文件中添加需要的权限。
          *
@@ -259,6 +261,12 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
                 startActivityForResult(takeIntent, TAKE_PHOTO_CODE);
 
             }
+        }else {
+            //拍照
+            Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Uri photoUri = getMediaFileUri(TYPE_TAKE_PHOTO);
+            takeIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            startActivityForResult(takeIntent, TAKE_PHOTO_CODE);
         }
     }
 
@@ -436,8 +444,8 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        sNavActivity = (NavigationActivity) activity;
-        sBleUtils = sNavActivity.getBleUtils();
+        sDrawerActivity = (DrawerActivity) activity;
+        sBleUtils = sDrawerActivity.getBleUtils();
     }
 
     @Override
@@ -559,6 +567,18 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
 
     public TextView getTvR() {
         return tvR;
+    }
+
+    public TextView getTvImagePosX() {
+        return tvImagePosX;
+    }
+
+    public TextView getTvImagePosY() {
+        return tvImagePosY;
+    }
+
+    public TextView getTvImagePosZ() {
+        return tvImagePosZ;
     }
 
     public File getMediaFile() {

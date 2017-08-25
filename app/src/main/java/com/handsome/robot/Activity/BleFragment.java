@@ -105,6 +105,7 @@ public class BleFragment extends Fragment implements OnClickListener {
     public String deviceRssi;
 
     public NavigationActivity mNavActivity;
+    public DrawerActivity mDrawerActivity;
 
 
     // 蓝牙扫描时间
@@ -282,6 +283,7 @@ public class BleFragment extends Fragment implements OnClickListener {
                 //更新连接状态
                 updateConnectionState(status);
                 System.out.println("BroadcastReceiver :" + "device connected");
+                Toast.makeText(getActivity(),"AM_Tool连接成功！",Toast.LENGTH_SHORT).show();
 
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED//Gatt连接失败
                     .equals(action)) {
@@ -291,6 +293,7 @@ public class BleFragment extends Fragment implements OnClickListener {
                 updateConnectionState(status);
                 System.out.println("BroadcastReceiver :"
                         + "device disconnected");
+                Toast.makeText(getActivity(),"AM_Tool连接失败！",Toast.LENGTH_SHORT).show();
 
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED//发现GATT服务器
                     .equals(action)) {
@@ -365,7 +368,7 @@ public class BleFragment extends Fragment implements OnClickListener {
                     fBleUtils.setRightDistance(Float.parseFloat(direction[1]));
                 }
                 tvStatus.setText(rev_string);
-                mNavActivity.setBleUtils(fBleUtils);
+                mDrawerActivity.setBleUtils(fBleUtils);
                 btnDiscoonect.setEnabled(true);
             }
         });
@@ -495,11 +498,13 @@ public class BleFragment extends Fragment implements OnClickListener {
             //TODO:选择关闭和开启的红外测距模块
             case R.id.btn_left_operation:
                 if (btnLeftOp.getText().equals("L_Open")) {
+                    Toast.makeText(getActivity(),"打开左边红外测距器",Toast.LENGTH_SHORT).show();
                     target_chara.setValue("3");
                     //调用蓝牙服务的写特征值方法实现发送数据
                     mBluetoothLeService.writeCharacteristic(target_chara);
                     btnLeftOp.setText(R.string.left_close_status);
                 } else {
+                    Toast.makeText(getActivity(),"关闭左边红外测距器",Toast.LENGTH_SHORT).show();
                     target_chara.setValue("2");
                     //调用蓝牙服务的写特征值方法实现发送数据
                     mBluetoothLeService.writeCharacteristic(target_chara);
@@ -508,11 +513,13 @@ public class BleFragment extends Fragment implements OnClickListener {
                 break;
             case R.id.btn_center_operation:
                 if (btnCenterOp.getText().equals("C_Open")) {
+                    Toast.makeText(getActivity(),"打开中间红外测距器",Toast.LENGTH_SHORT).show();
                     target_chara.setValue("5");
                     //调用蓝牙服务的写特征值方法实现发送数据
                     mBluetoothLeService.writeCharacteristic(target_chara);
                     btnCenterOp.setText(R.string.center_close_status);
                 } else {
+                    Toast.makeText(getActivity(),"关闭中间红外测距器",Toast.LENGTH_SHORT).show();
                     target_chara.setValue("4");
                     //调用蓝牙服务的写特征值方法实现发送数据
                     mBluetoothLeService.writeCharacteristic(target_chara);
@@ -521,11 +528,13 @@ public class BleFragment extends Fragment implements OnClickListener {
                 break;
             case R.id.btn_right_operation:
                 if (btnRightOp.getText().equals("R_Open")) {
+                    Toast.makeText(getActivity(),"打开右边红外测距器",Toast.LENGTH_SHORT).show();
                     target_chara.setValue("7");
                     //调用蓝牙服务的写特征值方法实现发送数据
                     mBluetoothLeService.writeCharacteristic(target_chara);
                     btnRightOp.setText(R.string.right_close_status);
                 } else {
+                    Toast.makeText(getActivity(),"关闭右边红外测距器",Toast.LENGTH_SHORT).show();
                     target_chara.setValue("6");
                     //调用蓝牙服务的写特征值方法实现发送数据
                     mBluetoothLeService.writeCharacteristic(target_chara);
@@ -538,6 +547,7 @@ public class BleFragment extends Fragment implements OnClickListener {
                 mBluetoothLeService.disconnect();
                 /*mBluetoothLeService = null;*/
                 btnDiscoonect.setEnabled(false);
+                Toast.makeText(getActivity(),"解除蓝牙连接",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -625,9 +635,9 @@ public class BleFragment extends Fragment implements OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mNavActivity = (NavigationActivity) activity;
-        mBluetoothAdapter = mNavActivity.getmBluetoothAdapter();
-        fBleUtils = mNavActivity.getBleUtils();
+        mDrawerActivity = (DrawerActivity) activity;
+        fBleUtils = mDrawerActivity.getBleUtils();
+        mBluetoothAdapter = mDrawerActivity.getmBluetoothAdapter();
        /* ((NavigationActivity) activity).setHandler(myHandler);*/
     }
 

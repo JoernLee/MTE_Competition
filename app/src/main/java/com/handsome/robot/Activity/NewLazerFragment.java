@@ -159,6 +159,18 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    public TextView getTvImagePosX() {
+        return tvImagePosX;
+    }
+
+    public TextView getTvImagePosY() {
+        return tvImagePosY;
+    }
+
+    public TextView getTvImagePosZ() {
+        return tvImagePosZ;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -251,6 +263,12 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
                 startActivityForResult(takeIntent, TAKE_PHOTO_CODE);
 
             }
+        }else {
+            //拍照
+            Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Uri photoUri = getMediaFileUri(TYPE_TAKE_PHOTO);
+            takeIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            startActivityForResult(takeIntent, TAKE_PHOTO_CODE);
         }
     }
 
@@ -304,7 +322,7 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
                 tvTime.setText(getTimeNow());
                 break;
             case R.id.btn_location_lazer:
-                Location location = sNavActivity.getLocation();
+                Location location = sDrawerActivity.getLocation();
                 tvLocation.setText("" + Double.toString(location.getLongitude()) + "-" + Double.toString(location.getLatitude()));
                 break;
         }
@@ -429,8 +447,8 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        sNavActivity = (NavigationActivity) activity;
-        sBleUtils = sNavActivity.getBleUtils();
+        sDrawerActivity = (DrawerActivity) activity;
+        sBleUtils = sDrawerActivity.getBleUtils();
     }
 
     @Override

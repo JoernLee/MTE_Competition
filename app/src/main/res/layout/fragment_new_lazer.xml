@@ -63,48 +63,48 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.25"
+                android:layout_weight="0.3"
                 android:layout_height="match_parent"
                 android:text="三轴长度："
                 android:textSize="14dp"/>
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.13"
+                android:layout_weight="0.09"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="L "
                 android:textSize="14dp"/>
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.13"
+                android:layout_weight="0.24"
                 android:layout_height="match_parent"
                 android:text="None "
                 android:textSize="14dp"
                 android:id="@+id/tv_left_distance_lazer"/>
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.13"
+                android:layout_weight="0.09"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="C "
                 android:textSize="14dp" />
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.13"
+                android:layout_weight="0.24"
                 android:layout_height="match_parent"
                 android:text="None "
                 android:textSize="14dp"
                 android:id="@+id/tv_center_distance_lazer"/>
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.13"
+                android:layout_weight="0.09"
                 android:layout_height="match_parent"
                 android:text="R "
                 android:gravity="center"
                 android:textSize="14dp"/>
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="0.13"
+                android:layout_weight="0.24"
                 android:layout_height="match_parent"
                 android:text="None "
                 android:textSize="14dp"
@@ -118,14 +118,14 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.25"
+                android:layout_weight="0.3"
                 android:text="测试姿态："
                 android:textSize="14dp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.13"
+                android:layout_weight="0.09"
                 android:gravity="center"
                 android:text="X "
                 android:textSize="14dp" />
@@ -134,14 +134,14 @@
                 android:id="@+id/tv_image_posture_x_lazer"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.13"
+                android:layout_weight="0.24"
                 android:text="None "
                 android:textSize="14dp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.13"
+                android:layout_weight="0.09"
                 android:gravity="center"
                 android:text="Y "
                 android:textSize="14dp" />
@@ -149,7 +149,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.13"
+                android:layout_weight="0.24"
                 android:text="None "
                 android:textSize="14dp"
                 android:id="@+id/tv_image_posture_y_lazer"/>
@@ -157,7 +157,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.13"
+                android:layout_weight="0.09"
                 android:gravity="center"
                 android:text="Z "
                 android:textSize="14dp" />
@@ -165,7 +165,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.13"
+                android:layout_weight="0.24"
                 android:text="None "
                 android:textSize="14dp"
                 android:id="@+id/tv_image_posture_z_lazer"/>
