@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
@@ -21,6 +23,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -67,7 +70,11 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
 
     private TextView tvSave;
 
-    private ImageView imagePhoto;
+    private MeasureView imagePhoto;
+    private Button btnPhoto;
+    private ImageView imageReturn;
+    private Canvas canvas;
+    private Paint paint;
 
     private Button btnSelectImage;
 
@@ -98,7 +105,16 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
     private Button btnCreate;
 
     //打点
-    private Button btnAdd;
+    private Button btnAddO;
+    private Button btnAddX;
+    private Button btnAddY;
+    private Button btnAddZ;
+    //打点的点名
+    private int addPointNumber = 0;
+    private Float[] pointO_xy = {0f,0f};
+    private Float[] pointX_xy = {0f,0f};
+    private Float[] pointY_xy = {0f,0f};
+    private Float[] pointZ_xy = {0f,0f};
 
 
 
@@ -174,7 +190,9 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
         tvSave = (TextView) view.findViewById(R.id.txt_save_image_measure);
         tvSave.setOnClickListener(this);
         //照片显示
-        imagePhoto = (ImageView) view.findViewById(R.id.iv_photo_measure);
+        imagePhoto = (MeasureView) view.findViewById(R.id.iv_photo_measure);
+        btnPhoto = (Button)view.findViewById(R.id.btn_photo_measure);
+        imageReturn = (ImageView)view.findViewById(R.id.iv_return_measure);
         //左中右距离
         tvL = (TextView) view.findViewById(R.id.tv_left_distance_measure);
         tvC = (TextView) view.findViewById(R.id.tv_center_distance_measure);
@@ -198,22 +216,68 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
         btnCreate.setOnClickListener(this);
 
         //打点
-        btnAdd = (Button)view.findViewById(R.id.btn_add_point_measure);
-        btnAdd.setOnClickListener(this);
+        btnAddO = (Button)view.findViewById(R.id.btn_add_pointo_measure);
+        btnAddO.setOnClickListener(this);
+        btnAddX = (Button)view.findViewById(R.id.btn_add_pointx_measure);
+        btnAddX.setOnClickListener(this);
+        btnAddY = (Button)view.findViewById(R.id.btn_add_pointy_measure);
+        btnAddY.setOnClickListener(this);
+        btnAddZ = (Button)view.findViewById(R.id.btn_add_pointz_measure);
+        btnAddZ.setOnClickListener(this);
 
-        imagePhoto.setOnClickListener(new View.OnClickListener() {
+
+        btnPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //获取当前的经度纬度
-                /*location = sNavActivity.getLocation();
-                latitude = Double.toString(location.getLatitude());
-                longitude = Double.toString(location.getLongitude());*/
-                //判断有无读写SD卡权限
                 takePhotos();
-
             }
         });
+        imageReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sDrawerActivity.getmDrawerLayout().openDrawer(sDrawerActivity.getmMenuListView());
+            }
+        });
+        imagePhoto.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        switch (addPointNumber) {
+                            case 0:
+                                pointO_xy[0] = motionEvent.getX();
+                                pointO_xy[1] = motionEvent.getY();
+                                imagePhoto.setmOLocation(pointO_xy);
+                                imagePhoto.invalidate();
+                                break;
+                            case 1:
+                                pointX_xy[0] = motionEvent.getX();
+                                pointX_xy[1] = motionEvent.getY();
+                                imagePhoto.setmXLocation(pointX_xy);
+                                imagePhoto.invalidate();
+                                break;
+                            case 2:
+                                pointY_xy[0] = motionEvent.getX();
+                                pointY_xy[1] = motionEvent.getY();
+                                imagePhoto.setmYLocation(pointY_xy);
+                                imagePhoto.invalidate();
+                                break;
+                            case 3:
+                                pointZ_xy[0] = motionEvent.getX();
+                                pointZ_xy[1] = motionEvent.getY();
+                                imagePhoto.setmZLocation(pointZ_xy);
+                                imagePhoto.invalidate();
+                                break;
 
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+
+                        break;
+                }
+                return true;
+            }
+        });
 
         return view;
     }
@@ -309,6 +373,8 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
             case R.id.txt_save_image_measure:
                 try {
                     saveToSD(myShot(getActivity()), "/storage/emulated/0/Pictures/梅特勒/", "measure-" + getTimeNow() + ".png");
+                    Toast.makeText(getActivity(),"已保存当前信息于-/storage/emulated/0/Pictures/梅特勒/",Toast.LENGTH_SHORT).show();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -316,14 +382,29 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
             case R.id.btn_in_amdistance_measure:
                 tvAmDistance.setText(tvNowDistance.getText().toString());
                 break;
-            case R.id.btn_add_point_measure:
-
+            case R.id.btn_add_pointo_measure:
+                addPointNumber = 0;
+                Toast.makeText(getActivity(),"请在上图设置O点",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_add_pointx_measure:
+                addPointNumber = 1;
+                Toast.makeText(getActivity(),"请在上图设置X点",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_add_pointy_measure:
+                addPointNumber = 2;
+                Toast.makeText(getActivity(),"请在上图设置Y点",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_add_pointz_measure:
+                addPointNumber = 3;
+                Toast.makeText(getActivity(),"请在上图设置Z点",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_create:
 
                 break;
         }
     }
+
+
 
     //保存到手机SD卡，供分享0519
     private void saveToSD(Bitmap bmp, String dirName, String fileName) throws IOException {
@@ -591,6 +672,10 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public TextView getTvNowDistance() {
+        return tvNowDistance;
     }
 
 

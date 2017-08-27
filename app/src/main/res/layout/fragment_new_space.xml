@@ -9,7 +9,15 @@
         android:orientation="horizontal"
         android:background="@color/royalblue"
         android:id="@+id/first_line">
-
+        <ImageView
+            android:id="@+id/iv_return_space"
+            android:layout_height="20dp"
+            android:layout_width="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:onClick="onClick"
+            android:src="@drawable/menu" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -40,7 +48,7 @@
         android:orientation="vertical"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="0dp">
 
         <TextView
             android:id="@+id/textView"
@@ -177,7 +185,7 @@
         android:orientation="vertical"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="0dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -284,7 +292,7 @@
         android:orientation="vertical"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="0dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -418,7 +426,7 @@
         android:orientation="vertical"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="0dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -518,6 +526,21 @@
                 android:textColor="@color/white"/>
         </LinearLayout>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="可视化图像"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+    <com.handsome.robot.Activity.SpaceView
+        android:id="@+id/iv_image_space"
+        android:layout_width="280dp"
+        android:layout_height="130dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="@color/royalblue"
+        android:onClick="onClick"/>
 
 
 </LinearLayout>

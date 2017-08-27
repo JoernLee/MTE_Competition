@@ -67,6 +67,7 @@ public class NewRoomFragment extends Fragment implements View.OnClickListener {
     private TextView tvSave;
 
     private ImageView imagePhoto;
+    private ImageView imageReturn;
 
 
     //三轴距离
@@ -167,6 +168,7 @@ public class NewRoomFragment extends Fragment implements View.OnClickListener {
         tvSave.setOnClickListener(this);
         //照片显示
         imagePhoto = (ImageView) view.findViewById(R.id.iv_photo_room);
+        imageReturn = (ImageView)view.findViewById(R.id.iv_return_room);
         //左中右距离
         tvL = (TextView) view.findViewById(R.id.tv_left_distance_room);
         tvR = (TextView) view.findViewById(R.id.tv_right_distance_room);
@@ -199,6 +201,13 @@ public class NewRoomFragment extends Fragment implements View.OnClickListener {
                 //判断有无读写SD卡权限
                 takePhotos();
 
+            }
+        });
+
+        imageReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sDrawerActivity.getmDrawerLayout().openDrawer(sDrawerActivity.getmMenuListView());
             }
         });
 
@@ -295,6 +304,8 @@ public class NewRoomFragment extends Fragment implements View.OnClickListener {
             case R.id.txt_save_image_room:
                 try {
                     saveToSD(myShot(getActivity()), "/storage/emulated/0/Pictures/梅特勒/", "room-" + getTimeNow() + ".png");
+                    Toast.makeText(getActivity(),"已保存当前信息于-/storage/emulated/0/Pictures/梅特勒/",Toast.LENGTH_SHORT).show();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -525,8 +536,9 @@ public class NewRoomFragment extends Fragment implements View.OnClickListener {
                     tvImageName.setText(photoName);
                     tvImageTime.setText(photoTime);*/
 
-
-
+                    //恢复图片比例
+                    imagePhoto.setScaleX(1);
+                    imagePhoto.setScaleY(1);
                     //将照片显示
                     Bitmap bitmap = BitmapFactory.decodeFile(getMediaFile().getPath());
                     imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bitmap, 250, 200));//imageView即为当前页面需要展示照片的控件，可替换
@@ -575,6 +587,10 @@ public class NewRoomFragment extends Fragment implements View.OnClickListener {
     public TextView getTvImagePosZ() {
         return tvImagePosZ;
     }
+    public TextView getTvNowDistance() {
+        return tvNowDistance;
+    }
+
 
 
     /**

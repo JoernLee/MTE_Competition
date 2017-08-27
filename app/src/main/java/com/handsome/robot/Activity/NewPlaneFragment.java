@@ -68,6 +68,7 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
     private TextView tvSave;
 
     public PlaneView viewPlane;
+    private ImageView imageReturn;
 
     //三轴距离
     private TextView tvL_1;
@@ -178,6 +179,7 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
         //照片显示
         viewPlane = (PlaneView) view.findViewById(R.id.iv_image_plane);
         viewPlane.setOnClickListener(this);
+        imageReturn = (ImageView)view.findViewById(R.id.iv_return_plane);
         //左中右距离
         tvL_1 = (TextView) view.findViewById(R.id.tv_left_distance_plane_1);
         tvL_2 = (TextView) view.findViewById(R.id.tv_left_distance_plane_2);
@@ -209,7 +211,16 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
         btnPlaneWidth_2 = (Button)view.findViewById(R.id.btn_in_width_plane_2);
         btnPlaneWidth_2.setOnClickListener(this);
 
+        imageReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sDrawerActivity.getmDrawerLayout().openDrawer(sDrawerActivity.getmMenuListView());
+            }
+        });
+
         return view;
+
+
     }
 
 
@@ -239,6 +250,8 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
             case R.id.txt_save_image_plane:
                 try {
                     saveToSD(myShot(getActivity()), "/storage/emulated/0/Pictures/梅特勒/", "plane-" + getTimeNow() + ".png");
+                    Toast.makeText(getActivity(),"已保存当前信息于-/storage/emulated/0/Pictures/梅特勒/",Toast.LENGTH_SHORT).show();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -559,6 +572,8 @@ public class NewPlaneFragment extends Fragment implements View.OnClickListener {
     public TextView getTvImagePosZ_2() {
         return tvImagePosZ_2;
     }
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

@@ -67,6 +67,7 @@ public class NewLeanFragment extends Fragment implements View.OnClickListener {
     private TextView tvSave;
 
     private ImageView imagePhoto;
+    private ImageView imageReturn;
 
     private Button btnSelectImage;
 
@@ -169,6 +170,7 @@ public class NewLeanFragment extends Fragment implements View.OnClickListener {
         tvSave.setOnClickListener(this);
         //照片显示
         imagePhoto = (ImageView) view.findViewById(R.id.iv_photo_lean);
+        imageReturn = (ImageView)view.findViewById(R.id.iv_return_lean);
         //左中右距离
         tvL = (TextView) view.findViewById(R.id.tv_left_distance_lean);
         tvC = (TextView) view.findViewById(R.id.tv_center_distance_lean);
@@ -204,7 +206,12 @@ public class NewLeanFragment extends Fragment implements View.OnClickListener {
 
             }
         });
-
+        imageReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sDrawerActivity.getmDrawerLayout().openDrawer(sDrawerActivity.getmMenuListView());
+            }
+        });
 
         return view;
     }
@@ -298,6 +305,7 @@ public class NewLeanFragment extends Fragment implements View.OnClickListener {
             case R.id.txt_save_image_lean:
                 try {
                     saveToSD(myShot(getActivity()), "/storage/emulated/0/Pictures/梅特勒/", "lean-" + getTimeNow() + ".png");
+                    Toast.makeText(getActivity(),"已保存当前信息于-/storage/emulated/0/Pictures/梅特勒/",Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -529,7 +537,9 @@ public class NewLeanFragment extends Fragment implements View.OnClickListener {
                     tvImageTime.setText(photoTime);*/
 
 
-
+                    //恢复图片比例
+                    imagePhoto.setScaleX(1);
+                    imagePhoto.setScaleY(1);
                     //将照片显示
                     Bitmap bitmap = BitmapFactory.decodeFile(getMediaFile().getPath());
                     imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bitmap, 250, 200));//imageView即为当前页面需要展示照片的控件，可替换
@@ -581,6 +591,9 @@ public class NewLeanFragment extends Fragment implements View.OnClickListener {
 
     public TextView getTvImagePosZ() {
         return tvImagePosZ;
+    }
+    public TextView getTvNowAngle() {
+        return tvNowAngle;
     }
 
 

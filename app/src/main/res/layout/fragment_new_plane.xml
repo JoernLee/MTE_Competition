@@ -9,7 +9,15 @@
         android:orientation="horizontal"
         android:background="@color/royalblue"
         android:id="@+id/first_line">
-
+        <ImageView
+            android:id="@+id/iv_return_plane"
+            android:layout_height="20dp"
+            android:layout_width="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:onClick="onClick"
+            android:src="@drawable/menu" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -464,7 +472,8 @@
         android:layout_height="wrap_content"
         android:text="可视化图像"
         android:textSize="16dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"/>
     <com.handsome.robot.Activity.PlaneView
         android:id="@+id/iv_image_plane"
         android:layout_width="280dp"

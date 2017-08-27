@@ -102,8 +102,13 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
     private int nowFragmentNumber = 0;
 
 
+    public DrawerLayout getmDrawerLayout() {
+        return mDrawerLayout;
+    }
 
-
+    public ListView getmMenuListView() {
+        return mMenuListView;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +130,7 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
         // 设置抽屉打开时，主要内容区被自定义阴影覆盖
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
                 GravityCompat.START);
+
         // 设置ActionBar可见，并且切换菜单和内容视图
      /*   getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);*/
@@ -300,6 +306,7 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
                     lazerFragment.getTvL().setText(String.valueOf(decimalFormat.format(mBleUtils.getLeftDistance())) + "cm" );
                     lazerFragment.getTvC().setText(String.valueOf(decimalFormat.format(mBleUtils.getCenterDistance())) + "cm" );
                     lazerFragment.getTvR().setText(String.valueOf(decimalFormat.format(mBleUtils.getRightDistance())) + "cm" );
+                    lazerFragment.getTvNowDistance().setText(String.valueOf(decimalFormat.format((mBleUtils.getLeftDistance() + mBleUtils.getCenterDistance() + mBleUtils.getRightDistance())/3)) + "cm");
 
                     lazerFragment.getTvImagePosZ().setText(decimalFormat.format(values[0]+(float)180.00) + "°");
                     lazerFragment.getTvImagePosX().setText(decimalFormat.format(values[1]) + "°");
@@ -310,6 +317,7 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
                 if (roomFragment != null){
                     roomFragment.getTvL().setText(String.valueOf(decimalFormat.format(mBleUtils.getLeftDistance())) + "cm" );
                     roomFragment.getTvR().setText(String.valueOf(decimalFormat.format(mBleUtils.getRightDistance())) + "cm" );
+                    roomFragment.getTvNowDistance().setText(String.valueOf(decimalFormat.format((mBleUtils.getLeftDistance()  + mBleUtils.getRightDistance())/2)) + "cm");
 
                     roomFragment.getTvImagePosZ().setText(decimalFormat.format(values[0]+(float)180.00) + "°");
                     roomFragment.getTvImagePosX().setText(decimalFormat.format(values[1]) + "°");
@@ -362,6 +370,8 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
                     measureFragment.getTvL().setText(String.valueOf(decimalFormat.format(mBleUtils.getLeftDistance())) + "cm" );
                     measureFragment.getTvC().setText(String.valueOf(decimalFormat.format(mBleUtils.getCenterDistance())) + "cm" );
                     measureFragment.getTvR().setText(String.valueOf(decimalFormat.format(mBleUtils.getRightDistance())) + "cm" );
+                    measureFragment.getTvNowDistance().setText(String.valueOf(decimalFormat.format((mBleUtils.getLeftDistance() + mBleUtils.getCenterDistance() + mBleUtils.getRightDistance())/3)) + "cm");
+
 
                     measureFragment.getTvImagePosZ().setText(decimalFormat.format(values[0]+(float)180.00) + "°");
                     measureFragment.getTvImagePosX().setText(decimalFormat.format(values[1]) + "°");

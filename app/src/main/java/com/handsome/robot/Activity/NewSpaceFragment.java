@@ -62,7 +62,8 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
 
     private TextView tvSave;
 
-    private ImageView imagePhoto;
+    private SpaceView viewSpace;
+    private ImageView imageReturn;
 
     //三轴距离
     private TextView tvL_1;
@@ -178,6 +179,10 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
         //保存文字
         tvSave = (TextView) view.findViewById(R.id.txt_save_image_space);
         tvSave.setOnClickListener(this);
+        //可视化图形
+        viewSpace = (SpaceView) view.findViewById(R.id.iv_image_space);
+        viewSpace.setOnClickListener(this);
+        imageReturn = (ImageView)view.findViewById(R.id.iv_return_space);
         //左中右距离
         tvL_1 = (TextView) view.findViewById(R.id.tv_left_distance_space_1);
         tvL_2 = (TextView) view.findViewById(R.id.tv_left_distance_space_2);
@@ -215,7 +220,12 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
         btnspaceWidth_2.setOnClickListener(this);
         btnspaceHeight_2 = (Button)view.findViewById(R.id.btn_in_height_space_2);
         btnspaceHeight_2.setOnClickListener(this);
-
+        imageReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sDrawerActivity.getmDrawerLayout().openDrawer(sDrawerActivity.getmMenuListView());
+            }
+        });
         return view;
     }
 
@@ -246,6 +256,8 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
             case R.id.txt_save_image_space:
                 try {
                     saveToSD(myShot(getActivity()), "/storage/emulated/0/Pictures/梅特勒/", "space-" + getTimeNow() + ".png");
+                    Toast.makeText(getActivity(),"已保存当前信息于-/storage/emulated/0/Pictures/梅特勒/",Toast.LENGTH_SHORT).show();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -275,13 +287,23 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btn_in_width_space_2:
                 Float leftDistance5 = Float.valueOf(tvC_2.getText().toString().substring(0,tvC_2.getText().toString().length()-2)) ;
-                spaceY = leftDistance5 - (spaceWidth/2);
+                spaceY =  (spaceWidth/2) - leftDistance5;
                 tvspaceWidth_2.setText(String.valueOf(decimalFormat.format(spaceY)));
                 break;
             case R.id.btn_in_height_space_2:
                 Float leftDistance6 = Float.valueOf(tvC_2.getText().toString().substring(0,tvC_2.getText().toString().length()-2)) ;
-                spaceZ = leftDistance6 - (spaceHeight/2);
+                spaceZ =  (spaceHeight/2) - leftDistance6;
                 tvspaceHeight_2.setText(String.valueOf(decimalFormat.format(spaceZ)));
+                break;
+            case R.id.iv_image_space:
+                viewSpace.setRecLength(spaceLength);
+                viewSpace.setRecWidth(spaceWidth);
+                viewSpace.setRecHeight(spaceHeight);
+
+                viewSpace.setPointX(spaceX);
+                viewSpace.setPointY(spaceY);
+                viewSpace.setPointZ(spaceZ);
+                viewSpace.invalidate();
                 break;
         }
     }
@@ -434,7 +456,7 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
                 Uri originalUri = data.getData(); // 获得图片的uri
                 Bitmap bit = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(originalUri));
                 //图片进行缩略显示-防止图片缓存溢出
-                imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bit, 300, 300));
+                //imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bit, 300, 300));
 
                 //下面的似乎不行-指针总是返回空
                 /*String[] proj = {MediaStore.Images.Media.DATA};
@@ -461,7 +483,7 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
                     if (data.hasExtra("data")) {
                         Log.i("URI", "data is not null");
                         Bitmap bitmap = data.getParcelableExtra("data");
-                        imagePhoto.setImageBitmap(bitmap);//imageView即为当前页面需要展示照片的控件，可替换
+                        //imagePhoto.setImageBitmap(bitmap);//imageView即为当前页面需要展示照片的控件，可替换
                     }
                 } else {
                     Log.i("URI", "Data is null");
@@ -503,7 +525,7 @@ public class NewSpaceFragment extends Fragment implements View.OnClickListener {
 
                     //将照片显示
                     Bitmap bitmap = BitmapFactory.decodeFile(getMediaFile().getPath());
-                    imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bitmap, 250, 200));//imageView即为当前页面需要展示照片的控件，可替换
+                    //imagePhoto.setImageBitmap(ThumbnailUtils.extractThumbnail(bitmap, 250, 200));//imageView即为当前页面需要展示照片的控件，可替换
 
                     //更新UI-经纬度和姿态
                    /* tvImageLocation.setText(photoLongitude + "-" + photoLatitude);

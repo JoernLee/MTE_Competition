@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,6 +107,7 @@ public class BleFragment extends Fragment implements OnClickListener {
 
     public NavigationActivity mNavActivity;
     public DrawerActivity mDrawerActivity;
+    private ImageView imageReturn;
 
 
     // 蓝牙扫描时间
@@ -172,6 +174,16 @@ public class BleFragment extends Fragment implements OnClickListener {
 
         lvDevice = (ListView) view.findViewById(R.id.lv_device);
         lvDevice.setAdapter(mleDeviceListAdapter);
+
+        imageReturn = (ImageView)view.findViewById(R.id.iv_return_ble);
+
+        imageReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDrawerActivity.getmDrawerLayout().openDrawer(mDrawerActivity.getmMenuListView());
+            }
+        });
+
 
 
         /* listview点击函数 */
