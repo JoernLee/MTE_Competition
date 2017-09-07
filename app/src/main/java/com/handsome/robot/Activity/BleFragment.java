@@ -24,6 +24,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,14 +89,15 @@ public class BleFragment extends Fragment implements OnClickListener {
     private Button btnCenterOp;
     private Button btnRightOp;
 
+    //蓝牙设备的list
     private ListView lvDevice;
+
     private TextView tvStatus;
 
     // 描述扫描蓝牙的状态
     private boolean mScanning;
     private boolean scan_flag;
     private Handler mHandler = new Handler();
-    private Handler myHandler = new Handler();
     private BleUtils fBleUtils;
     //蓝牙服务
     private static BluetoothLeService mBluetoothLeService;
@@ -180,7 +182,7 @@ public class BleFragment extends Fragment implements OnClickListener {
         imageReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDrawerActivity.getmDrawerLayout().openDrawer(mDrawerActivity.getmMenuListView());
+                mDrawerActivity.getmDrawerLayout().openDrawer(Gravity.START);
             }
         });
 
@@ -335,14 +337,6 @@ public class BleFragment extends Fragment implements OnClickListener {
         }else {
             btnDiscoonect.setEnabled(false);
         }
-       /* Message msg = new Message();
-        msg.what = 1;
-        Bundle b = new Bundle();
-        b.putString("connect_state", status);
-        msg.setData(b);
-        //将连接状态更新的UI的textview上
-        myHandler.sendMessage(msg);
-        System.out.println("connect_state:" + status);*/
     }
 
 
@@ -566,24 +560,6 @@ public class BleFragment extends Fragment implements OnClickListener {
 
     private void scanLeDevice(final boolean enable) {
         if (enable) {
-            // Stops scanning after a pre-defined scan period.
-           /* mHandler.postDelayed(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mScanning = false;
-                            scan_flag = true;
-                            btnScan.setText("扫描设备");
-                            Log.i("SCAN", "stop.....................");
-                            mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                        }
-                    });
-                }
-            }, SCAN_PERIOD);*/
 			/* 开始扫描蓝牙设备，带mLeScanCallback 回调函数 */
             Log.i("SCAN", "begin.....................");
             mScanning = true;

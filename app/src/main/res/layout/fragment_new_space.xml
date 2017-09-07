@@ -55,6 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="标定模式"
+            android:textColor="@color/royalblue"
             android:textSize="16dp"
             android:textStyle="bold" />
 
@@ -191,6 +192,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="标定值"
+            android:textColor="@color/royalblue"
             android:textSize="16dp"
             android:textStyle="bold" />
 
@@ -298,6 +300,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="定位模式"
+            android:textColor="@color/royalblue"
             android:textSize="16dp"
             android:textStyle="bold" />
 
@@ -432,6 +435,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="定位值"
+            android:textColor="@color/royalblue"
             android:textSize="16dp"
             android:textStyle="bold" />
 
@@ -530,7 +534,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="可视化图像"
+        android:text="可视化图像（点击下图生成）"
+        android:textColor="@color/royalblue"
         android:textSize="16dp"
         android:textStyle="bold" />
     <com.handsome.robot.Activity.SpaceView

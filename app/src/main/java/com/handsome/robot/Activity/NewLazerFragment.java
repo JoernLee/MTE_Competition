@@ -21,6 +21,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +88,7 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
 
     //AM距离
     private TextView tvAmDistance;
-    private Button  btnInAmDistance;
+    private Button btnInAmDistance;
 
     //时间
     private TextView tvTime;
@@ -121,7 +122,7 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
     private String directionAngle; //方向角，指向东南西北，绕Z轴角度
     private String slantAngle; //倾斜角，手机头部和尾部抬起的角度，绕X轴角度
     private String rotationAngle; //旋转角,手机左右侧抬起的角度，绕Y轴角度
-    DecimalFormat decimalFormat=new DecimalFormat(".0");
+    DecimalFormat decimalFormat = new DecimalFormat(".0");
 
 
     //声明一个AlertDialog构造器
@@ -187,28 +188,28 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
         tvSave.setOnClickListener(this);
         //照片显示
         imagePhoto = (ImageView) view.findViewById(R.id.iv_photo_lazer);
-        imageReturn = (ImageView)view.findViewById(R.id.iv_return_lazer);
+        imageReturn = (ImageView) view.findViewById(R.id.iv_return_lazer);
         //左中右距离
         tvL = (TextView) view.findViewById(R.id.tv_left_distance_lazer);
         tvC = (TextView) view.findViewById(R.id.tv_center_distance_lazer);
         tvR = (TextView) view.findViewById(R.id.tv_right_distance_lazer);
         //测试姿态
-        tvImagePosX = (TextView)view.findViewById(R.id.tv_image_posture_x_lazer);
-        tvImagePosY = (TextView)view.findViewById(R.id.tv_image_posture_y_lazer);
-        tvImagePosZ = (TextView)view.findViewById(R.id.tv_image_posture_z_lazer);
+        tvImagePosX = (TextView) view.findViewById(R.id.tv_image_posture_x_lazer);
+        tvImagePosY = (TextView) view.findViewById(R.id.tv_image_posture_y_lazer);
+        tvImagePosZ = (TextView) view.findViewById(R.id.tv_image_posture_z_lazer);
         //目前距离
-        tvNowDistance = (TextView)view.findViewById(R.id.tv_now_distance_lazer);
+        tvNowDistance = (TextView) view.findViewById(R.id.tv_now_distance_lazer);
         //AM距离
-        tvAmDistance = (TextView)view.findViewById(R.id.tv_am_distance_lazer);
-        btnInAmDistance = (Button)view.findViewById(R.id.btn_in_amdistance_lazer);
+        tvAmDistance = (TextView) view.findViewById(R.id.tv_am_distance_lazer);
+        btnInAmDistance = (Button) view.findViewById(R.id.btn_in_amdistance_lazer);
         btnInAmDistance.setOnClickListener(this);
         //时间
-        tvTime = (TextView)view.findViewById(R.id.tv_time_lazer);
-        btnInTime = (Button)view.findViewById(R.id.btn_in_time_lazer);
+        tvTime = (TextView) view.findViewById(R.id.tv_time_lazer);
+        btnInTime = (Button) view.findViewById(R.id.btn_in_time_lazer);
         btnInTime.setOnClickListener(this);
         //地点
-        tvLocation = (TextView)view.findViewById(R.id.tv_location_lazer);
-        btnInLocation = (Button)view.findViewById(R.id.btn_location_lazer);
+        tvLocation = (TextView) view.findViewById(R.id.tv_location_lazer);
+        btnInLocation = (Button) view.findViewById(R.id.btn_location_lazer);
         btnInLocation.setOnClickListener(this);
 
         imagePhoto.setOnClickListener(new View.OnClickListener() {
@@ -227,7 +228,8 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
         imageReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sDrawerActivity.getmDrawerLayout().openDrawer(sDrawerActivity.getmMenuListView());
+                sDrawerActivity.getmDrawerLayout().openDrawer(Gravity.START);
+
             }
         });
         return view;
@@ -274,7 +276,7 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
                 startActivityForResult(takeIntent, TAKE_PHOTO_CODE);
 
             }
-        }else {
+        } else {
             //拍照
             Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             Uri photoUri = getMediaFileUri(TYPE_TAKE_PHOTO);
@@ -284,13 +286,14 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
     }
 
     //把图片转换成bitmap形式传递通过intent形式传递过去
-    private Bitmap setimage(ImageView view1){
-        Bitmap image = ((BitmapDrawable)view1.getDrawable()).getBitmap();
+    private Bitmap setimage(ImageView view1) {
+        Bitmap image = ((BitmapDrawable) view1.getDrawable()).getBitmap();
         Bitmap bitmap1 = Bitmap.createBitmap(image);
         return bitmap1;
     }
+
     //bitmap转换成byte形式
-    private byte[] Bitmap2Bytes(Bitmap bm){
+    private byte[] Bitmap2Bytes(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
         return baos.toByteArray();
@@ -308,7 +311,7 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
         String timeStamp = new SimpleDateFormat("yyyyMMdd-HH:mm:ss").format(new Date());
         File mediaFile;
         if (type == TYPE_TAKE_PHOTO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + longitude +"_" + latitude + "_" + timeStamp + ".jpg");
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + longitude + "_" + latitude + "_" + timeStamp + ".jpg");
             setMediaFile(mediaFile);
         } else {
             return null;
@@ -318,11 +321,11 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.txt_save_image_lazer:
                 try {
                     saveToSD(myShot(getActivity()), "/storage/emulated/0/Pictures/梅特勒/", "lazer-" + getTimeNow() + ".png");
-                    Toast.makeText(getActivity(),"已保存当前信息于-/storage/emulated/0/Pictures/梅特勒/",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "已保存当前信息于-/storage/emulated/0/Pictures/梅特勒/", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -406,10 +409,10 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
         return bmp;
     }
 
-    public String getTimeNow(){
-        SimpleDateFormat    formatter    =   new    SimpleDateFormat    ("yyyy年MM月dd日    HH:mm:ss     ");
-        Date    curDate    =   new    Date(System.currentTimeMillis());//获取当前时间
-        String    str    =    formatter.format(curDate);
+    public String getTimeNow() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日    HH:mm:ss     ");
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        String str = formatter.format(curDate);
         return str;
     }
 
@@ -542,7 +545,6 @@ public class NewLazerFragment extends Fragment implements View.OnClickListener {
                     slantAngle = decimalFormat.format(angleValue[1]);
                     //旋转角-绕Y轴角度，水平面朝上为0°，面朝下+-180°，手机左侧抬起旋转增加，顺时针增加度数
                     rotationAngle = decimalFormat.format(angleValue[2]);*/
-
 
 
                     //更新UI-LCR Distance

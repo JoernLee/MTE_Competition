@@ -62,6 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="工程模式"
+            android:textColor="@color/royalblue"
             android:textStyle="bold"
             android:textSize="16dp"/>
         <TextView
@@ -224,6 +225,7 @@
                 android:layout_weight="0.4"
                 android:layout_height="match_parent"
                 android:text="AM距离:"
+                android:textColor="@color/royalblue"
                 android:textStyle="bold"
                 android:gravity="center_vertical"
                 android:textSize="16dp"/>

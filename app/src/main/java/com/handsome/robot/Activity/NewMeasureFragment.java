@@ -22,6 +22,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -235,7 +236,7 @@ public class NewMeasureFragment extends Fragment implements View.OnClickListener
         imageReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sDrawerActivity.getmDrawerLayout().openDrawer(sDrawerActivity.getmMenuListView());
+                sDrawerActivity.getmDrawerLayout().openDrawer(Gravity.START);
             }
         });
         imagePhoto.setOnTouchListener(new View.OnTouchListener() {

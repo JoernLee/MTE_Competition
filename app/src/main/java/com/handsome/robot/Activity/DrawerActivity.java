@@ -141,6 +141,9 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
             setDefaultFragment();
         }
 
+        float zzz = -90f;
+        double chan = Math.cos(2f*3.1415f/360f*zzz);
+
         //检查蓝牙
         init_ble();
         //检查定位权限
@@ -168,7 +171,7 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
         transaction.show(lazerFragment);
         transaction.commit();
     }
-
+    //初始化蓝牙设备
     private void init_ble() {
         // 手机硬件支持蓝牙
         if (!getPackageManager().hasSystemFeature(
@@ -188,7 +191,7 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
         }
 
     }
-
+    //对于定位服务权限判断
     private void init_right() {
         if (mBluetoothAdapter.isEnabled()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -213,7 +216,7 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
             }
         }
     }
-
+    //开启实时定位
     private void init_location(){
         //获取定位服务
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -268,6 +271,7 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
         }
     };
 
+    //初始化姿态传感器
     private void init_sensor(){
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -326,13 +330,17 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
                 break;
             case 2:
                 if (leanFragment != null){
+
                     leanFragment.getTvL().setText(String.valueOf(decimalFormat.format(mBleUtils.getLeftDistance())) + "cm" );
                     leanFragment.getTvC().setText(String.valueOf(decimalFormat.format(mBleUtils.getCenterDistance())) + "cm" );
                     leanFragment.getTvR().setText(String.valueOf(decimalFormat.format(mBleUtils.getRightDistance())) + "cm" );
+                   // leanFragment.getTvNowAngle().setText(String.valueOf(Math.cos(values[1])));
 
                     leanFragment.getTvImagePosZ().setText(decimalFormat.format(values[0]+(float)180.00) + "°");
                     leanFragment.getTvImagePosX().setText(decimalFormat.format(values[1]) + "°");
                     leanFragment.getTvImagePosY().setText(decimalFormat.format(values[2]) + "°");
+                    leanFragment.getTvNowAngle().setText(String.valueOf(decimalFormat.format(Math.cos(2f*3.1415f/360f*values[1])) + "°" ));
+
                 }
                 break;
             case 3:
@@ -508,7 +516,8 @@ public class DrawerActivity extends FragmentActivity implements SensorEventListe
         // 更新选择后的item和title，然后关闭菜单
         mMenuListView.setItemChecked(position, true);
         setTitle(mMenuTitles[position]);
-        mDrawerLayout.closeDrawer(mMenuListView);
+        /*mDrawerLayout.closeDrawer(mMenuListView);*/
+        mDrawerLayout.closeDrawers();
     }
 
     //隐藏所有的fragment
